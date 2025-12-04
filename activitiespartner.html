@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasquirre – Activities Partner</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <style>
+  :root {
+    --bg: #fff6e6;
+    --bg-soft: #ffe8c7;
+    --round-soft: #f1d2b2;
+    --text-main: #5a2c13;
+    --text-sub: #a96b3d;
+    --accent: #c5652c;
+    --accent-deep: #824119;
+    --border-soft: #f0d4af;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
+
+  body{
+    background:var(--bg);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    min-height:100vh;
+    padding:1.5rem 0;
+  }
+
+  .screen{
+    width:100%;
+    max-width:428px;
+    min-height:100vh;
+    background:var(--bg);
+    padding-bottom:2.8rem;
+    overflow-y:auto;
+    transition:opacity .45s ease, filter .45s ease;
+  }
+
+  .screen.fade-out{
+    opacity:0;
+    filter:blur(10px);
+  }
+
+  /* HEADER */
+  .app-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0.6rem 1.1rem;
+  }
+
+  .brand-row{
+    display:flex;
+    align-items:center;
+    gap:0.45rem;
+  }
+
+  .brand-title{
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--accent);
+  }
+
+  .back-btn{
+    width:42px;height:42px;
+    display:flex;
+    justify-content:center;align-items:center;
+    background:var(--round-soft);
+    border:none;
+    border-radius:50%;
+    font-size:1.3rem;
+    cursor:pointer;
+    color:var(--accent);
+  }
+
+  /* TABS */
+  .tab-row{
+    margin:0.4rem 1.1rem 0.8rem;
+    display:flex;
+    gap:0.45rem;
+    background:#ffe8c7;
+    padding:0.25rem;
+    border-radius:999px;
+  }
+
+  .tab-chip{
+    flex:1;
+    border:none;
+    border-radius:999px;
+    font-size:0.8rem;
+    padding:0.4rem 0;
+    background:transparent;
+    color:var(--text-sub);
+    font-weight:500;
+    cursor:pointer;
+  }
+
+  .tab-chip.active{
+    background:#fff;
+    color:var(--accent);
+    font-weight:600;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  }
+
+  .section-title{
+    margin:0.2rem 1.1rem 0.4rem;
+    font-size:0.95rem;
+    font-weight:600;
+    color:var(--text-main);
+  }
+
+  /* TASK CARD */
+  .task-card{
+    background:#fff;
+    margin:0.5rem 1.1rem;
+    padding:1rem;
+    border-radius:18px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.08);
+  }
+
+  .task-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:0.25rem;
+  }
+
+  .task-job{
+    font-size:1rem;
+    font-weight:600;
+    color:var(--text-main);
+  }
+
+  .task-id{
+    font-size:0.75rem;
+    color:var(--accent);
+  }
+
+  .task-meta{
+    font-size:0.78rem;
+    color:var(--text-sub);
+    margin-top:4px;
+  }
+
+  .status-chip{
+    display:inline-block;
+    padding:0.22rem 0.7rem;
+    border-radius:999px;
+    font-size:0.75rem;
+    margin-top:6px;
+  }
+  .status-ongoing{background:rgba(255,210,150,.7);color:var(--accent);}
+  .status-wait{background:rgba(255,237,173,.85);color:#8c5a12;}
+  .status-done{background:rgba(181,227,181,.85);color:#195d32;}
+
+  .progress-bar{
+    width:100%;
+    height:10px;
+    background:#ffe8c7;
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:0.6rem;
+  }
+
+  .progress-fill{
+    height:10px;
+    background:linear-gradient(90deg,#c5652c,#824119);
+    width:0%;
+    transition:0.35s;
+  }
+
+  .task-actions{
+    display:flex;
+    gap:0.5rem;
+    margin-top:0.9rem;
+  }
+
+  .btn-pill{
+    flex:1;
+    padding:0.6rem 0;
+    border-radius:999px;
+    border:none;
+    font-size:0.8rem;
+    font-weight:600;
+    cursor:pointer;
+  }
+
+  .btn-detail{
+    background:var(--accent);
+    color:#fff;
+  }
+
+  .btn-chat{
+    background:#fff;
+    border:1.3px solid var(--accent);
+    color:var(--accent);
+  }
+
+  /* NAV */
+  .bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:428px;
+    background:var(--bg-soft);
+    border-top:1px solid var(--border-soft);
+    padding:0.6rem 0;
+    display:flex;
+    justify-content:space-around;
+    z-index:100;
+  }
+
+  .nav-item{
+    text-align:center;
+    text-decoration:none;
+    color:var(--text-sub);
+    font-size:0.75rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.1rem;
+  }
+
+  .nav-item.active{
+    color:var(--accent);
+    font-weight:600;
+  }
+
+  .nav-item i{
+    font-size:1.35rem;
+  }
+
+  .empty-state{
+    padding:1rem 1.1rem 2rem;
+    font-size:0.85rem;
+    color:var(--text-sub);
+  }
+  </style>
+</head>
+<body>
+
+<div class="screen" id="frame">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <button class="back-btn" onclick="goHome()">
+      <i class="bx bx-arrow-back"></i>
+    </button>
+    <div class="brand-row">
+      <span class="brand-title">Aktivitas Partner</span>
+    </div>
+    <span style="width:42px;"></span>
+  </header>
+
+  <!-- TABS -->
+  <div class="tab-row">
+    <button class="tab-chip active" id="tab-ongoing" onclick="switchTab('ongoing')">Ongoing</button>
+    <button class="tab-chip" id="tab-wait" onclick="switchTab('waiting_confirm')">Menunggu Konfirmasi</button>
+    <button class="tab-chip" id="tab-done" onclick="switchTab('completed')">Selesai</button>
+  </div>
+
+  <h2 class="section-title" id="sectionLabel">Task Sedang Berjalan</h2>
+
+  <div id="taskContainer"></div>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="homepartner.html" class="nav-item">
+    <i class="bx bx-home-alt"></i><span>Home</span>
+  </a>
+  <a href="chatpartner.html" class="nav-item">
+    <i class="bx bx-chat"></i><span>Chat</span>
+  </a>
+  <a href="activitiespartner.html" class="nav-item active">
+    <i class="bx bx-task"></i><span>Activities</span>
+  </a>
+  <a href="profilepartner.html" class="nav-item">
+    <i class="bx bx-user"></i><span>Profile</span>
+  </a>
+</nav>
+
+<script>
+/* ====== DATA SEED (DUMMY) ====== */
+function seedPartnerTaskIfEmpty(){
+  let t = localStorage.getItem("partnerTaskTasquirre");
+  if(!t){
+    const demo = {
+      id:"TSQ-X71P9",
+      jobdesk:"Copywriting 2 halaman A4",
+      user:"Teresa",
+      price:80000,
+      status:"ongoing",      // ongoing | submitted | waiting_confirm | completed
+      progress:25,           // 0,25,50,75,100
+      createdAt:Date.now()
+    };
+    localStorage.setItem("partnerTaskTasquirre", JSON.stringify(demo));
+    return demo;
+  }
+  return JSON.parse(t);
+}
+
+let currentTab = "ongoing";
+let task = seedPartnerTaskIfEmpty();
+
+/* ====== UI RENDER ====== */
+function switchTab(tab){
+  currentTab = tab;
+
+  document.querySelectorAll(".tab-chip").forEach(b=>b.classList.remove("active"));
+  document.getElementById("tab-ongoing").classList.toggle("active", tab==="ongoing");
+  document.getElementById("tab-wait").classList.toggle("active", tab==="waiting_confirm");
+  document.getElementById("tab-done").classList.toggle("active", tab==="completed");
+
+  const label = document.getElementById("sectionLabel");
+  if(tab==="ongoing") label.textContent="Task Sedang Berjalan";
+  else if(tab==="waiting_confirm") label.textContent="Menunggu Konfirmasi User";
+  else label.textContent="Task Selesai";
+
+  renderTask();
+}
+
+function renderTask(){
+  const container = document.getElementById("taskContainer");
+  task = seedPartnerTaskIfEmpty();
+
+  if(task.status !== currentTab && !(currentTab==="ongoing" && task.status==="submitted")){
+    container.innerHTML = `<div class="empty-state">Belum ada task pada status ini.</div>`;
+    return;
+  }
+
+  let statusChipClass = "status-ongoing";
+  let statusText = "Sedang Dikerjakan";
+  if(task.status==="submitted" || task.status==="waiting_confirm"){
+    statusChipClass = "status-wait";
+    statusText = "Menunggu Konfirmasi User";
+  }
+  if(task.status==="completed"){
+    statusChipClass = "status-done";
+    statusText = "Selesai";
+  }
+
+  const percent = task.progress || 0;
+
+  container.innerHTML = `
+    <div class="task-card">
+      <div class="task-header">
+        <span class="task-job">${task.jobdesk}</span>
+        <span class="task-id">${task.id}</span>
+      </div>
+      <p class="task-meta">
+        Client: ${task.user}<br>
+        Fee: Rp ${Number(task.price||0).toLocaleString("id-ID")}
+      </p>
+
+      <span class="status-chip ${statusChipClass}">${statusText}</span>
+
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${percent}%"></div>
+      </div>
+
+      <div class="task-actions">
+        <button class="btn-pill btn-detail" onclick="openDetail()">
+          Lihat Detail
+        </button>
+        <button class="btn-pill btn-chat" onclick="openChat()">
+          Chat User
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+/* ====== NAVIGATION ====== */
+function goHome(){
+  const f=document.getElementById("frame");
+  f.classList.add("fade-out");
+  setTimeout(()=>window.location.href="homepartner.html",450);
+}
+
+function openDetail(){
+  const f=document.getElementById("frame");
+  const t = seedPartnerTaskIfEmpty();
+  f.classList.add("fade-out");
+
+  if(t.status==="completed"){
+    setTimeout(()=>window.location.href=`confirmfinish.html?id=${encodeURIComponent(t.id)}`,450);
+  } else if(t.status==="submitted" || t.status==="waiting_confirm"){
+    setTimeout(()=>window.location.href=`tasksubmitted.html?id=${encodeURIComponent(t.id)}`,450);
+  } else {
+    setTimeout(()=>window.location.href=`taskongoing.html?id=${encodeURIComponent(t.id)}`,450);
+  }
+}
+
+function openChat(){
+  const f=document.getElementById("frame");
+  const t = seedPartnerTaskIfEmpty();
+  f.classList.add("fade-out");
+  setTimeout(()=>window.location.href=`chatpartner.html?id=${encodeURIComponent(t.id)}`,450);
+}
+
+/* INIT */
+switchTab("ongoing");
+</script>
+</body>
+</html>

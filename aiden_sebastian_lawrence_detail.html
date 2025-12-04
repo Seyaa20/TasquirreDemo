@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasquirre – Aiden Sebastian</title>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #fff6e6;
+  --accent: #c5652c;
+  --text: #5a2c13;
+}
+
+body {
+  background: var(--bg);
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+.screen {
+  width: 100%;
+  max-width: 428px;
+  padding: 1.2rem;
+  transform: translateY(0);
+  transition: 0.35s ease;
+}
+
+/* header */
+header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: #ffe8c7;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--accent);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* card */
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 1.2rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.avatar {
+  width: 100%;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.desc {
+  color: #946a4d;
+  margin-top: 4px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.rating {
+  margin-top: 6px;
+  font-weight: 600;
+  color: #f39c12;
+}
+
+.price {
+  margin-top: 6px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+/* buttons */
+.btn-group {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.btn {
+  padding: 0.9rem;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-chat {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-order {
+  background: #d07234;
+  color: white;
+}
+
+.btn-match {
+  background: none;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+}
+
+/* POPUP */
+.popup-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+
+.popup-box {
+  background: #fff;
+  padding: 1.2rem;
+  border-radius: 18px;
+  width: 85%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.popup-btn {
+  padding: 0.8rem;
+  width: 100%;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.popup-topup {
+  background: var(--accent);
+  color: white;
+  margin-bottom: 0.7rem;
+}
+
+.popup-cancel {
+  background: none;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+}
+</style>
+</head>
+
+<body>
+
+  <div id="toastPay" class="toast-pay">Pembayaran berhasil</div>
+
+<style>
+.toast-pay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: rgba(197, 101, 44, 0.95);
+  color: white;
+  padding: 18px 26px;
+  border-radius: 20px;
+  font-size: 1.05rem;   /* lebih besar */
+  font-weight: 600;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.22);
+  z-index: 9999;
+  opacity: 0;
+  transition: 0.35s ease;
+  text-align: center;
+  width: 80%;
+  max-width: 320px;
+}
+
+.toast-pay.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+</style>
+
+
+
+<div class="screen">
+
+  <!-- POPUP -->
+  <div id="topupPopup" class="popup-bg">
+    <div class="popup-box">
+      <h3 style="color:#c5652c; margin-bottom:8px;">Saldo Tidak Cukup</h3>
+      <p style="font-size:0.9rem; color:#5a2c13; margin-bottom:1.2rem;">
+        Kamu perlu top up untuk melanjutkan pesanan.
+      </p>
+
+      <button id="btnGoTopup" class="popup-btn popup-topup">Top Up Sekarang</button>
+      <button id="btnCancelTopup" class="popup-btn popup-cancel">Batal</button>
+    </div>
+  </div>
+
+  <header>
+    <button class="back-btn" onclick="history.back()">
+      <i class="bx bx-arrow-back"></i>
+    </button>
+    <h2 style="color:var(--accent); font-size:1.3rem;">Detail Partner</h2>
+  </header>
+
+  <div class="card">
+    <div class="avatar">
+      <img src="aiden.jpg">
+    </div>
+
+    <div class="name">Aiden Sebastian Lawrence</div>
+
+        <div class="rating">⭐ 4.95</div>
+
+    <div class="desc">
+      Copywriter kreatif & detail-oriented.<br>
+      Spesialis caption, storytelling, dan copywriting untuk konten branding personal maupun bisnis.
+    </div>
+
+    <div class="job-section" style="margin-top:14px; padding:12px; background:#fff8ef; border-radius:14px; border:1.5px solid #f0d4af;">
+  <div style="font-weight:700; color:#c5652c; margin-bottom:6px; font-size:1.05rem;">
+    Draft Policy (Default)
+  </div>
+
+  <div style="font-size:0.9rem; color:#5a2c13; line-height:1.42;">
+    <b>Jobdesk:</b> Menyusun copywriting untuk 2 lembar A4  
+    (setara ± 4 halaman konten), termasuk headline, CTA, & tone penulisan sesuai brand.
+
+    <br><br>
+
+    <b>Durasi Pengerjaan:</b> 1 hari kerja  
+    (revisi minor 1x tetap gratis)
+
+    <br><br>
+
+    <b>Harga Awal:</b> Rp 22.000  
+    <span style="color:#a06c3d; font-size:0.85rem;">(bisa dinego lewat chat)</span>
+  </div>
+</div>
+
+
+
+    <div class="btn-group">
+      <button id="chatBtn" class="btn btn-chat">Chat dulu untuk nego harga</button>
+      <button id="orderBtn" class="btn btn-order">Pesan sekarang</button>
+      <button id="matchBtn" class="btn btn-match">Match dengan yang lain</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// =========================
+// CHAT BUTTON (smooth fade)
+// =========================
+document.getElementById("chatBtn").onclick = () => {
+  const sc = document.querySelector(".screen");
+  sc.style.opacity = "0";
+  sc.style.transform = "translateY(20px)";
+  setTimeout(() => {
+    window.location.href = "aidenchat.html";
+  }, 350);
+};
+
+// ===============================
+// PESAN SEKARANG (cek saldo dulu)
+// ===============================
+document.getElementById("orderBtn").onclick = () => {
+
+  const price = 22000;
+  let saldo = Number(localStorage.getItem("saldoTasquirre") || 0);
+
+  // kalau saldo kurang → popup muncul
+  if (saldo < price) {
+    document.getElementById("topupPopup").style.display = "flex";
+    return;
+  }
+
+  // Kurangi saldo
+  saldo -= price;
+  localStorage.setItem("saldoTasquirre", saldo);
+
+  // Format angka
+  const formattedPrice = price.toLocaleString("id-ID", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+  // ==================================================
+  // 1. TAMBAH NOTIFIKASI PEMBAYARAN
+  // ==================================================
+  let notifList = JSON.parse(localStorage.getItem("notifTasquirre") || "[]");
+
+  notifList.unshift({
+    text: `Pembayaran Rp${formattedPrice} untuk jasa Aiden Sebastian Lawrence berhasil. Uang ditahan sampai pesanan selesai.`,
+    read: false,
+    time: new Date().toLocaleString("id-ID")
+  });
+
+  localStorage.setItem("notifTasquirre", JSON.stringify(notifList));
+
+  // ==================================================
+  // 2. TAMBAH RIWAYAT SALDO (UANG KELUAR)
+  // ==================================================
+  let history = JSON.parse(localStorage.getItem("saldoHistoryTasquirre") || "[]");
+
+  history.unshift({
+    type: "out",
+    amount: formattedPrice,
+    desc: "Pembayaran jasa – Aiden Sebastian",
+    time: new Date().toLocaleString("id-ID")
+  });
+
+  localStorage.setItem("saldoHistoryTasquirre", JSON.stringify(history));
+
+  // ============================================
+// 4. SIMPAN TASK BARU KE recentTasks
+// ============================================
+let tasks = JSON.parse(localStorage.getItem("recentTasks") || "[]");
+
+tasks.unshift({
+  id: generateTaskID(),
+  partner: "Aiden Sebastian Lawrence",
+  jobdesk: "Copywriting",
+  createdAt: Date.now(),
+  progress: 0
+});
+
+localStorage.setItem("recentTasks", JSON.stringify(tasks));
+
+
+  // ==================================================
+  // 3. FEEDBACK KE USER
+  // ==================================================
+showToastPay("Pembayaran berhasil! Saldo tersisa Rp " + saldo.toLocaleString("id-ID"));
+
+setTimeout(() => {
+  const sc = document.querySelector(".screen");
+  sc.style.opacity = "0";
+  sc.style.transform = "translateY(20px)";
+  setTimeout(() => {
+    window.location.href = "home.html";
+  }, 350);
+}, 1800); // nunggu toast selesai
+};
+
+// =========================
+// POPUP TOPUP → ke topup
+// =========================
+document.getElementById("btnGoTopup").onclick = () => {
+
+  // simpan halaman tujuan
+  localStorage.setItem("returnAfterTopup", "aiden_sebastian_lawrence_detail.html");
+
+  const sc = document.querySelector(".screen");
+  sc.style.opacity = "0";
+  sc.style.transform = "translateY(20px)";
+
+  setTimeout(() => {
+    window.location.href = "topup.html";
+  }, 300);
+};
+
+function generateTaskID() {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numbers = "0123456789";
+
+  let result = "TSQ-";
+
+  // 3 huruf random
+  for (let i = 0; i < 3; i++) {
+    result += letters[Math.floor(Math.random() * letters.length)];
+  }
+
+  // 5 angka random
+  for (let i = 0; i < 5; i++) {
+    result += numbers[Math.floor(Math.random() * numbers.length)];
+  }
+
+  return result;
+}
+
+
+
+
+// =========================
+// POPUP CANCEL → close
+// =========================
+document.getElementById("btnCancelTopup").onclick = () => {
+  document.getElementById("topupPopup").style.display = "none";
+};
+
+// =========================
+// MATCH WITH NEXT PARTNER
+// =========================
+const partners = [
+  { name: "Nova Ardelia", rating: 4.79 },
+  { name: "Lynette Aramore", rating: 4.88 },
+  { name: "Keira Novaline", rating: 4.74 },
+  { name: "Riven D'Auric", rating: 4.91 },
+  { name: "Ezren Vale", rating: 4.85 },
+  { name: "Aiden Sebastian Lawrence", rating: 4.95 },
+  { name: "Kairos Nolan", rating: 4.82 }
+];
+
+partners.sort((a,b) => b.rating - a.rating);
+
+document.getElementById("matchBtn").onclick = () => {
+  const current = "Aiden Sebastian Lawrence";
+  const index = partners.findIndex(p => p.name === current);
+
+  if (index === -1 || index === partners.length - 1) {
+    alert("Tidak ada partner lain untuk dimatching.");
+    return;
+  }
+
+  const next = partners[index + 1];
+
+  const file = next.name
+    .toLowerCase()
+    .replace(/ /g, "_")
+    .replace(/'/g, "") + "_detail.html";
+
+  window.location.href = file;
+};
+
+function showToastPay(message) {
+  const t = document.getElementById("toastPay");
+  t.textContent = message;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+</script>
+
+
+</body>
+</html>

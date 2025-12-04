@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasquirre – Bersih Rumah</title>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #fff6e6;
+  --bg-soft: #ffe8c7;
+  --accent: #c5652c;
+  --text-main: #5a2c13;
+  --border-soft: #f0d4af;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.screen {
+  width: 100%;
+  max-width: 428px;
+  min-height: 100vh;
+  background: var(--bg);
+  border-radius: 32px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.15);
+  overflow-y: auto;
+  padding-bottom: 1rem;
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.35s ease;
+}
+.screen.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 1rem 1.2rem 0.4rem;
+}
+
+.back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  border: none;
+  font-size: 1.4rem;
+  color: var(--accent);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.header-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* SEARCH */
+.search-wrapper {
+  position: relative;
+  width: calc(100% - 2.4rem);
+  margin: 1rem auto;
+}
+
+.search-box {
+  background: white;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid var(--border-soft);
+}
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+/* DROPDOWN */
+.search-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  padding: 0.3rem 0;
+  display: none;
+  z-index: 50;
+}
+
+.search-item {
+  padding: 0.9rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  cursor: pointer;
+}
+.search-item i {
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+.no-match {
+  padding: 0.9rem 1.2rem;
+  color: #a57558;
+  font-size: 0.85rem;
+}
+
+/* QUICK MATCH BUTTON */
+.quick-btn {
+  width: calc(100% - 2.4rem);
+  margin: 0 auto 1rem;
+  display: block;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, #d07234, #c0521d);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(197, 101, 44, 0.25);
+}
+
+/* LIST */
+.partner-list {
+  padding: 0 1.2rem;
+}
+
+.partner-card {
+  background: #fff;
+  border-radius: 18px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  cursor: pointer;
+}
+.partner-card:hover {
+  transform: translateY(-3px);
+}
+
+.avatar {
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info { flex: 1; }
+
+.name {
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 1rem;
+}
+
+.desc {
+  font-size: 0.78rem;
+  color: #946a4d;
+  margin-top: 3px;
+}
+
+.rating {
+  font-weight: 600;
+  color: #f39c12;
+  margin-top: 4px;
+}
+
+.price {
+  margin-top: 4px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  top: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(197,82,43,0.92);
+  color: white;
+  padding: 14px 22px;
+  border-radius: 18px;
+  opacity: 0;
+  transition: 0.45s ease;
+  font-size: 0.9rem;
+  z-index: 999;
+}
+.toast.show {
+  top: 90px;
+  opacity: 1;
+}
+</style>
+</head>
+
+<body>
+
+<div id="toast" class="toast">Coming soon</div>
+
+<div class="screen" id="screen">
+
+  <div class="header">
+    <button class="back-btn" onclick="goBack()"><i class="bx bx-arrow-back"></i></button>
+    <span class="header-title">Bersih-Bersih Rumah</span>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrapper">
+    <div class="search-box">
+      <i class="bx bx-search"></i>
+      <input type="text" id="searchInput" placeholder="Cari partner terbaik…">
+    </div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
+  <button class="quick-btn" onclick="quickMatch()">Quick Match</button>
+
+  <div class="partner-list" id="partnerList"></div>
+
+</div>
+
+<script>
+window.onload = () => {
+  document.getElementById("screen").classList.add("loaded");
+  loadPartners();
+};
+
+/* Partner Data */
+let partners = [
+  { name: "Fauzan D", rating: 4.8, price: 20000, desc: "Cepat, teliti, ramah", img: "physicaltask.jpeg" },
+  { name: "Gina Putri", rating: 4.7, price: 22000, desc: "Ahli merapikan ruangan", img: "physicaltask.jpeg" }
+];
+
+partners.sort((a,b) => b.rating - a.rating);
+
+/* LOAD PARTNERS */
+function loadPartners() {
+  let q = document.getElementById("searchInput").value.toLowerCase();
+  const list = document.getElementById("partnerList");
+
+  list.innerHTML = partners
+    .filter(p => p.name.toLowerCase().includes(q))
+    .map(p => `
+      <div class="partner-card" onclick="selectPartner('${p.name}')">
+        <div class="avatar"><img src="${p.img}"></div>
+        <div class="info">
+          <div class="name">${p.name}</div>
+          <div class="desc">${p.desc}</div>
+          <div class="rating">⭐ ${p.rating}</div>
+          <div class="price">Rp ${p.price.toLocaleString("id-ID")}</div>
+        </div>
+      </div>
+    `)
+    .join("");
+}
+
+/* SEARCH DROPDOWN */
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+
+searchInput.addEventListener("input", () => {
+  let q = searchInput.value.toLowerCase().trim();
+
+  searchResults.style.display = "block";
+
+  const filtered = partners.filter(p => p.name.toLowerCase().includes(q));
+
+  if (filtered.length === 0) {
+    searchResults.innerHTML = `
+      <div class="no-match">No matches found</div>
+    `;
+  } else {
+    searchResults.innerHTML = filtered
+      .map(p => `
+        <div class="search-item" onclick="chooseSearch('${p.name}')">
+          <i class='bx bx-user'></i> ${p.name}
+        </div>
+      `)
+      .join("");
+  }
+
+  loadPartners();
+});
+
+function chooseSearch(name) {
+  searchInput.value = name;
+  searchResults.style.display = "none";
+  loadPartners();
+}
+
+/* Hide dropdown click outside */
+document.addEventListener("click", e => {
+  if (!searchResults.contains(e.target) && !searchInput.contains(e.target)) {
+    searchResults.style.display = "none";
+  }
+});
+
+/* Quick Match */
+function quickMatch() {
+  showToast("Match with " + partners[0].name);
+}
+
+/* Select partner */
+function selectPartner(n) {
+  showToast(n + " is coming soon");
+}
+
+/* Toast */
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1700);
+}
+
+/* BACK FIXED → KE HOME */
+function goBack() {
+  const sc = document.getElementById("screen");
+  sc.style.opacity = "0";
+  sc.style.transform = "translateY(20px)";
+  setTimeout(() => window.location.href = "physicaltask.html", 350);
+}
+</script>
+
+</body>
+</html>

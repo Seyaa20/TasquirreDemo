@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tasquirre – Task Detail</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #fff6e6;
+      --bg-soft: #ffe8c7;
+      --accent: #c5652c;
+      --accent-deep: #824119;
+      --text-main: #5a2c13;
+      --text-sub: #a96b3d;
+      --border-soft: #f0d4af;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    body{
+      background:var(--bg);
+      font-family:"Poppins",sans-serif;
+      display:flex;
+      justify-content:center;
+      min-height:100vh;
+    }
+
+    .screen{
+      width:100%;
+      max-width:428px;
+      min-height:100vh;
+      background:var(--bg);
+      overflow-y:auto;
+      padding-bottom:1.3rem;
+
+      opacity:0;
+      transform:translateY(20px);
+      filter:blur(4px);
+      transition:0.4s ease;
+    }
+    .screen.loaded{
+      opacity:1;
+      transform:translateY(0);
+      filter:blur(0);
+    }
+    .screen.fade-out{
+      opacity:0;
+      filter:blur(10px);
+    }
+
+    /* HEADER */
+    .header{
+      padding:1rem 1.2rem 0.6rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .header-left{
+      display:flex;
+      align-items:center;
+      gap:0.8rem;
+    }
+
+    .back-btn{
+      width:42px;height:42px;
+      border-radius:999px;
+      background:var(--bg-soft);
+      border:none;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:1.4rem;
+      color:var(--accent);
+      cursor:pointer;
+    }
+
+    .header-title{
+      font-size:1.1rem;
+      font-weight:700;
+      color:var(--accent);
+    }
+
+    .header-status-chip{
+      padding:0.25rem 0.7rem;
+      border-radius:999px;
+      font-size:0.75rem;
+      font-weight:600;
+      background:rgba(222,140,79,0.16);
+      color:#d96c2d;
+    }
+
+    main{
+      padding:0 1.2rem 1.2rem;
+    }
+
+    /* PARTNER CARD */
+    .partner-card{
+      background:linear-gradient(135deg,#c5652c,#824119);
+      border-radius:22px;
+      padding:1.2rem 1.1rem;
+      color:#fff;
+      display:flex;
+      gap:0.9rem;
+      align-items:center;
+      box-shadow:0 14px 28px rgba(130,65,25,0.45);
+      margin-bottom:1rem;
+    }
+
+    .partner-avatar{
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      overflow:hidden;
+      border:2px solid rgba(255,255,255,0.8);
+      flex-shrink:0;
+    }
+    .partner-avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .partner-meta{
+      flex:1;
+    }
+    .partner-name{
+      font-size:1rem;
+      font-weight:700;
+    }
+    .partner-id{
+      font-size:0.78rem;
+      opacity:0.85;
+      margin-top:2px;
+    }
+    .partner-tags{
+      margin-top:6px;
+      display:flex;
+      gap:0.35rem;
+      flex-wrap:wrap;
+      font-size:0.73rem;
+    }
+    .tag-pill{
+      padding:0.2rem 0.55rem;
+      border-radius:999px;
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.4);
+      backdrop-filter:blur(4px);
+    }
+
+    .partner-rating{
+      text-align:right;
+      font-size:0.8rem;
+    }
+    .partner-rating strong{
+      font-size:0.95rem;
+    }
+
+    /* SECTION TITLE */
+    .section-title{
+      font-size:0.9rem;
+      font-weight:600;
+      color:var(--text-main);
+      margin:0.4rem 0 0.3rem;
+    }
+
+    /* SUMMARY CARD */
+    .summary-card{
+      background:#fff;
+      border-radius:20px;
+      padding:0.85rem 1rem 1rem;
+      box-shadow:0 8px 18px rgba(0,0,0,0.08);
+      margin-bottom:1rem;
+    }
+
+    .summary-row{
+      display:flex;
+      justify-content:space-between;
+      font-size:0.8rem;
+      color:var(--text-sub);
+      margin-top:3px;
+    }
+    .summary-row span:first-child{
+      font-weight:500;
+    }
+
+    .summary-title{
+      font-size:1.05rem;
+      font-weight:700;
+      color:var(--text-main);
+      margin-bottom:0.25rem;
+    }
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:0.2rem 0.55rem;
+      border-radius:999px;
+      font-size:0.75rem;
+      font-weight:600;
+      background:rgba(255,191,133,0.18);
+      color:#d66c2d;
+      margin-top:0.45rem;
+    }
+    .status-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#ffcf66;
+      box-shadow:0 0 0 5px rgba(255,207,102,0.25);
+    }
+
+    /* PROGRESS */
+    .progress-card{
+      background:#fff;
+      border-radius:20px;
+      padding:0.95rem 1rem 1.05rem;
+      box-shadow:0 8px 18px rgba(0,0,0,0.08);
+      margin-bottom:1rem;
+    }
+    .progress-top{
+      display:flex;
+      justify-content:space-between;
+      font-size:0.8rem;
+      color:var(--text-main);
+    }
+    .progress-bar-wrap{
+      margin-top:0.5rem;
+      width:100%;
+      height:11px;
+      border-radius:999px;
+      background:linear-gradient(to right,rgba(255,255,255,0.6),rgba(187,119,62,0.3));
+      overflow:hidden;
+    }
+    .progress-bar-fill{
+      width:50%;
+      height:100%;
+      background:linear-gradient(90deg,#fff,#ffe4c4,#f39c4a);
+      border-radius:999px;
+    }
+
+    /* TIMELINE */
+    .timeline{
+      margin-top:0.75rem;
+      display:flex;
+      flex-direction:column;
+      gap:0.6rem;
+    }
+    .timeline-item{
+      display:flex;
+      align-items:flex-start;
+      gap:0.6rem;
+      font-size:0.8rem;
+    }
+    .timeline-dot-wrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      margin-top:2px;
+    }
+    .timeline-dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#f39c4a;
+      box-shadow:0 0 0 4px rgba(243,156,74,0.25);
+    }
+    .timeline-dot.past{
+      background:#c5652c;
+      box-shadow:none;
+    }
+    .timeline-dot.upcoming{
+      background:#d9c1a2;
+      box-shadow:none;
+    }
+    .timeline-line{
+      flex:1;
+      width:2px;
+      margin-top:3px;
+      background:linear-gradient(to bottom,rgba(197,101,44,0.4),rgba(197,101,44,0));
+    }
+
+    .timeline-text span{
+      display:block;
+    }
+    .timeline-title{
+      font-weight:600;
+      color:var(--text-main);
+    }
+    .timeline-time{
+      color:var(--text-sub);
+      font-size:0.76rem;
+      margin-top:1px;
+    }
+
+    /* DETAIL CARD */
+    .detail-card{
+      background:#fff;
+      border-radius:20px;
+      padding:0.95rem 1rem 1.05rem;
+      box-shadow:0 8px 18px rgba(0,0,0,0.08);
+      margin-bottom:1rem;
+      font-size:0.82rem;
+      color:var(--text-main);
+    }
+    .detail-label{
+      font-size:0.78rem;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      color:var(--text-sub);
+      margin-bottom:0.3rem;
+      font-weight:600;
+    }
+    .detail-block{
+      margin-top:0.65rem;
+    }
+    .detail-block ul{
+      margin-top:0.15rem;
+      margin-left:1.05rem;
+    }
+    .detail-block li{
+      margin-bottom:0.15rem;
+    }
+    .inline-pill{
+      display:inline-block;
+      padding:0.12rem 0.5rem;
+      border-radius:999px;
+      border:1px solid var(--border-soft);
+      font-size:0.78rem;
+      margin-right:0.4rem;
+      margin-top:0.2rem;
+      background:#fffdf7;
+    }
+
+    /* PRICE CARD */
+    .price-card{
+      background:#fff;
+      border-radius:20px;
+      padding:0.95rem 1rem 1.05rem;
+      box-shadow:0 8px 18px rgba(0,0,0,0.08);
+      margin-bottom:1.15rem;
+      font-size:0.83rem;
+      color:var(--text-main);
+    }
+    .price-row{
+      display:flex;
+      justify-content:space-between;
+      margin:0.2rem 0;
+    }
+    .price-row.total{
+      margin-top:0.5rem;
+      padding-top:0.45rem;
+      border-top:1px dashed var(--border-soft);
+      font-weight:700;
+    }
+    .price-row span:last-child{
+      font-weight:600;
+    }
+
+    /* ACTIONS */
+    .actions{
+      display:flex;
+      flex-direction:column;
+      gap:0.6rem;
+      margin-top:0.4rem;
+    }
+    .btn-primary{
+      width:100%;
+      padding:0.85rem 0;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(135deg,#d07234,#c0521d);
+      color:#fff;
+      font-size:0.95rem;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 10px 22px rgba(197,101,44,0.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.4rem;
+    }
+    .btn-secondary{
+      width:100%;
+      padding:0.78rem 0;
+      border-radius:999px;
+      border:1.5px solid var(--accent);
+      background:#fff;
+      color:var(--accent);
+      font-size:0.9rem;
+      font-weight:600;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.4rem;
+    }
+    .btn-ghost{
+      width:100%;
+      padding:0.7rem 0;
+      border-radius:999px;
+      border:none;
+      background:none;
+      color:#b0442a;
+      font-size:0.82rem;
+      font-weight:600;
+      cursor:pointer;
+      opacity:0.9;
+    }
+
+    /* TOAST */
+    .toast{
+      position:fixed;
+      top:-80px;
+      left:50%;
+      transform:translateX(-50%);
+      padding:13px 20px;
+      border-radius:18px;
+      background:rgba(197,82,43,0.95);
+      color:#fff;
+      font-size:0.88rem;
+      box-shadow:0 8px 24px rgba(0,0,0,0.28);
+      opacity:0;
+      transition:all 0.45s cubic-bezier(.25,.46,.45,1);
+      z-index:9999;
+    }
+    .toast.show{
+      top:88px;
+      opacity:1;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="toast" class="toast">Action done</div>
+
+<div class="screen" id="screen">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <button class="back-btn" onclick="goBack()">
+        <i class='bx bx-arrow-back'></i>
+      </button>
+      <div>
+        <div class="header-title">Task Detail</div>
+        <div style="font-size:0.75rem;color:var(--text-sub);margin-top:2px;">
+          Copywriting • Ongoing
+        </div>
+      </div>
+    </div>
+    <span class="header-status-chip">Ongoing</span>
+  </header>
+
+  <main>
+
+    <!-- PARTNER CARD -->
+    <section class="partner-card">
+      <div class="partner-avatar">
+        <!-- ganti "aiden.jpg" dengan nama file foto kamu -->
+        <img src="aiden.jpg" alt="Aiden Sebastian Lawrence">
+      </div>
+      <div class="partner-meta">
+        <div class="partner-name">Aiden Sebastian Lawrence</div>
+        <div class="partner-id">ID: 12345678910</div>
+        <div class="partner-tags">
+          <span class="tag-pill">Copywriter</span>
+          <span class="tag-pill">Digital Task</span>
+        </div>
+      </div>
+      <div class="partner-rating">
+        <div>⭐ <strong>4.9</strong></div>
+        <div style="opacity:0.9;margin-top:2px;">36 jobs</div>
+      </div>
+    </section>
+
+    <!-- SUMMARY -->
+    <h2 class="section-title">Ringkasan Task</h2>
+    <section class="summary-card">
+      <div class="summary-title">Copywriting – Brand Awareness Caption</div>
+      <div class="summary-row">
+        <span>Start</span><span>Sat, 18 Sep 2025 • 09.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Estimasi selesai</span><span>Sun, 19 Sep 2025 • 21.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Order ID</span><span>#CPW-2025-0918</span>
+      </div>
+
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span>In progress</span>
+      </div>
+    </section>
+
+    <!-- PROGRESS & TIMELINE -->
+    <h2 class="section-title">Progress</h2>
+    <section class="progress-card">
+      <div class="progress-top">
+        <span>Overall progress</span>
+        <span>50%</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill"></div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot-wrap">
+            <div class="timeline-dot past"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-text">
+            <span class="timeline-title">Task diterima</span>
+            <span class="timeline-time">18 Sep 2025 • 08.45</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot-wrap">
+            <div class="timeline-dot"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-text">
+            <span class="timeline-title">Draft pertama sedang ditulis</span>
+            <span class="timeline-time">18 Sep 2025 • 10.15</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot-wrap">
+            <div class="timeline-dot upcoming"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-text">
+            <span class="timeline-title">Draft dikirim ke kamu</span>
+            <span class="timeline-time">Estimasi 18 Sep 2025 • 19.00</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot-wrap">
+            <div class="timeline-dot upcoming"></div>
+          </div>
+          <div class="timeline-text">
+            <span class="timeline-title">Task selesai & diarsipkan</span>
+            <span class="timeline-time">Menunggu konfirmasi kamu</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAIL TASK -->
+    <h2 class="section-title">Detail Pekerjaan</h2>
+    <section class="detail-card">
+      <div class="detail-block">
+        <div class="detail-label">Deskripsi singkat</div>
+        <div>
+          Aiden akan menulis copy untuk kebutuhan media sosial berupa caption Instagram
+          dan teks promosi singkat yang berfokus pada peningkatan brand awareness
+          dan engagement audiens.
+        </div>
+      </div>
+
+      <div class="detail-block">
+        <div class="detail-label">Ruang lingkup</div>
+        <ul>
+          <li>3–5 caption Instagram untuk satu kampanye promosi.</li>
+          <li>Penyesuaian gaya bahasa sesuai brand guideline yang kamu berikan.</li>
+          <li>Optimasi kalimat pembuka agar lebih menarik dan kuat di hook.</li>
+          <li>1 kali revisi ringan setelah draft pertama.</li>
+        </ul>
+      </div>
+
+      <div class="detail-block">
+        <div class="detail-label">Preferensi kamu</div>
+        <div>
+          <span class="inline-pill">Tone: friendly & warm</span>
+          <span class="inline-pill">Bahasa: Indonesia</span>
+          <span class="inline-pill">Target: Gen Z & young adult</span>
+        </div>
+      </div>
+
+      <div class="detail-block">
+        <div class="detail-label">Catatan tambahan</div>
+        <div>
+          Brand bergerak di bidang jasa layanan produktivitas. Hindari kata-kata
+          yang terlalu hard-selling, fokus pada solusi, manfaat, dan call to action
+          yang jelas namun tetap natural.
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICE -->
+    <h2 class="section-title">Rincian Biaya</h2>
+    <section class="price-card">
+      <div class="price-row">
+        <span>Jasa Copywriting (flat)</span>
+        <span>Rp 40.000</span>
+      </div>
+      <div class="price-row">
+        <span>Platform fee Tasquirre</span>
+        <span>Rp 5.000</span>
+      </div>
+      <div class="price-row">
+        <span>Biaya layanan transaksi</span>
+        <span>Rp 3.000</span>
+      </div>
+      <div class="price-row total">
+        <span>Total yang kamu bayar</span>
+        <span>Rp 48.000</span>
+      </div>
+    </section>
+
+    <!-- ACTION BUTTONS -->
+    <section class="actions">
+<button class="btn-primary" onclick="goChatAiden()">
+  <i class='bx bx-message-dots'></i>
+  <span>Chat dengan Aiden</span>
+</button>
+
+
+      <button class="btn-secondary" onclick="showToast('Permintaan revisi terkirim')">
+        <i class='bx bx-edit-alt'></i>
+        <span>Ajukan revisi</span>
+      </button>
+
+<button class="btn-ghost" onclick="markTaskAsCompleted()">
+  Tandai sebagai selesai
+</button>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+  window.onload = () => {
+    document.getElementById("screen").classList.add("loaded");
+  };
+
+  function goBack(){
+    const sc = document.getElementById("screen");
+    sc.classList.add("fade-out");
+    setTimeout(() => {
+      // ganti ke "activities.html" kalau kamu mau back ke Activities
+      window.location.href = "activities.html";
+    }, 450);
+  }
+
+  function showToast(message){
+    const t = document.getElementById("toast");
+    t.textContent = message;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),1700);
+
+    
+  }
+
+  function goChatAiden(){
+  const sc = document.getElementById("screen");
+  sc.classList.add("fade-out");
+
+  setTimeout(() => {
+    window.location.href = "aidenchat.html";
+  }, 450);
+}
+
+/* MARK TASK AS COMPLETED */
+function markTaskAsCompleted(){
+  // Simpan status selesai di localStorage
+  localStorage.setItem("taskCopywritingStatus", "completed");
+
+  // Munculkan toast
+  showToast("Task berhasil ditandai selesai");
+
+  // Setelah animasi, kembali ke Activities
+  const sc = document.getElementById("screen");
+  sc.classList.add("fade-out");
+
+  setTimeout(() => {
+    window.location.href = "activities.html?tab=completed";
+  }, 450);
+}
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasquirre – Partner Home</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+<style>
+:root {
+  --bg: #fff6e6;
+  --bg-soft: #ffe8c7;
+  --round-soft: #f1d2b2;
+  --text-main: #5a2c13;
+  --text-sub: #a96b3d;
+  --accent: #c5652c;
+  --accent-deep: #824119;
+  --border-soft: #f0d4af;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
+
+body{
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:1.5rem 0;
+}
+
+.screen{
+  width:100%;
+  max-width:428px;
+  min-height:100vh;
+  background:var(--bg);
+  padding-bottom:2.2rem;
+  overflow-y:auto;
+  transition:opacity 0.45s ease,filter 0.45s ease;
+}
+
+.screen.fade-out{
+  opacity:0;
+  filter:blur(10px);
+}
+
+/* HEADER */
+.app-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0.45rem 1.1rem;
+}
+
+.brand-row{
+  display:flex;
+  align-items:center;
+  gap:0.45rem;
+}
+
+.logo-small{
+  width:60px;height:60px;object-fit:contain;
+}
+
+.brand-name{
+  font-size:1.25rem;
+  font-weight:700;
+  color:var(--accent);
+}
+
+.icon-ghost{
+  border:none;
+  background:var(--round-soft);
+  width:42px;height:42px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:50%;
+  color:var(--accent);
+  font-size:1.35rem;
+  cursor:pointer;
+  position:relative;
+}
+
+/* SALDO */
+.wallet-card{
+  background:#fff;
+  margin:1rem 1.1rem;
+  border-radius:22px;
+  padding:1.1rem;
+  box-shadow:0 8px 18px rgba(0,0,0,0.09);
+}
+
+.wallet-label{
+  font-size:0.9rem;
+  color:var(--text-sub);
+  margin-bottom:5px;
+}
+
+.wallet-amount{
+  font-size:1.25rem;
+  font-weight:700;
+  color:var(--accent-deep);
+}
+
+.wallet-row{
+  display:flex;
+  justify-content:space-between;
+  gap:0.7rem;
+  margin:0 1.1rem 1.1rem;
+}
+
+.pill-btn{
+  flex:1;
+  padding:0.85rem 0;
+  border-radius:999px;
+  font-size:0.85rem;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+}
+
+.pill-btn.primary{
+  background:linear-gradient(145deg,#c5652c,#f4984a);
+  color:#fff;
+}
+
+.pill-btn.secondary{
+  background:#fff;
+  border:1.4px solid var(--accent);
+  color:var(--accent);
+}
+
+/* SECTION TITLE */
+.section-title{
+  margin:1rem 1.1rem 0.4rem;
+  font-size:1rem;
+  font-weight:600;
+  color:var(--text-main);
+}
+
+/* TASK CARD */
+.task-item{
+  background:#fff;
+  margin:0.6rem 1.1rem;
+  padding:1rem;
+  border-radius:18px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.08);
+}
+
+.task-header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:0.2rem;
+}
+
+.task-job{
+  font-size:1rem;
+  font-weight:600;
+}
+
+.task-meta{
+  font-size:0.78rem;
+  color:var(--text-sub);
+  margin-top:3px;
+}
+
+.task-btn-row{
+  display:flex;
+  gap:0.5rem;
+  margin-top:0.8rem;
+}
+
+.task-btn{
+  flex:1;
+  padding:0.6rem 0;
+  border-radius:999px;
+  border:none;
+  font-size:0.8rem;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.task-btn.accept{
+  background:var(--accent);
+  color:#fff;
+}
+
+.task-btn.reject{
+  background:#fff;
+  border:1.4px solid var(--accent);
+  color:var(--accent);
+}
+
+/* ANALYTICS */
+.analytics-card{
+  background:#fff;
+  border-radius:18px;
+  padding:1rem;
+  box-shadow:0 6px 16px rgba(0,0,0,0.08);
+  margin:0.5rem 1.1rem 2rem;
+}
+
+.analytics-chart{
+  width:100%;
+  max-width:350px;
+  margin:0 auto;
+}
+
+/* NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:428px;
+  background:var(--bg-soft);
+  border-top:1px solid var(--border-soft);
+  padding:0.6rem 0;
+  display:flex;
+  justify-content:space-around;
+  z-index:100;
+}
+
+.nav-item{
+  text-align:center;
+  text-decoration:none;
+  color:var(--text-sub);
+  font-size:0.75rem;
+  display:flex;
+  flex-direction:column;
+  gap:0.1rem;
+}
+
+.nav-item.active{
+  color:var(--accent);
+  font-weight:600;
+}
+
+.nav-item i{
+  font-size:1.35rem;
+}
+
+/* TOAST */
+.toast-popup{
+  position:fixed;
+  top:-80px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(197,82,43,0.92);
+  padding:13px 18px;
+  border-radius:18px;
+  color:#fff;
+  opacity:0;
+  transition:0.45s ease;
+  z-index:9999;
+}
+
+.toast-popup.show{
+  top:90px;
+  opacity:1;
+}
+</style>
+</head>
+
+<body>
+
+<div id="toast" class="toast-popup">Action Success</div>
+
+<div class="screen" id="frame">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand-row">
+      <img src="tupai.png.png" class="logo-small">
+      <span class="brand-name">Tasquirre Partner</span>
+    </div>
+
+    <button class="icon-ghost" onclick="openNotif()">
+      <i class="bx bx-bell"></i>
+      <span id="notifDot"
+        style="position:absolute;top:6px;right:6px;width:10px;height:10px;background:#c20000;border-radius:50%;display:block;">
+      </span>
+    </button>
+  </header>
+
+  <!-- SALDO -->
+  <div class="wallet-card">
+    <p class="wallet-label">Saldo Partner</p>
+    <p id="walletAmount" class="wallet-amount">Rp 0</p>
+  </div>
+
+  <div class="wallet-row">
+    <button class="pill-btn primary" onclick="goTopup()">Top Up</button>
+    <button class="pill-btn secondary" onclick="switchUser()">Switch to User</button>
+  </div>
+
+  <!-- TASK MASUK (DUMMY) -->
+  <h2 class="section-title">Task Masuk</h2>
+  <div id="taskList">
+    <div class="task-item" id="dummyTaskCard">
+      <div class="task-header">
+        <span class="task-job">Copywriting 2 halaman A4</span>
+        <span style="font-size:0.75rem;color:var(--accent)">ID: TSQ-X71P9</span>
+      </div>
+
+      <p class="task-meta">
+        Dari: Teresa<br>
+        Waktu: 18 Des 2025, 11.09
+      </p>
+
+      <div class="task-btn-row">
+        <button class="task-btn accept" onclick="acceptDummyTask()">Accept</button>
+        <button class="task-btn reject" onclick="rejectDummyTask()">Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANALYTICS -->
+  <h2 class="section-title">Analytics</h2>
+
+  <div class="analytics-card">
+    <canvas id="analyticChart" class="analytics-chart"></canvas>
+  </div>
+
+</div>
+
+<!-- NAV -->
+<nav class="bottom-nav">
+  <a href="homepartner.html" class="nav-item active">
+    <i class="bx bx-home-alt"></i><span>Home</span>
+  </a>
+  <a href="chatpartner.html" class="nav-item">
+    <i class="bx bx-chat"></i><span>Chat</span>
+  </a>
+  <a href="activitiespartner.html" class="nav-item">
+    <i class="bx bx-task"></i><span>Activities</span>
+  </a>
+  <a href="profilepartner.html" class="nav-item">
+    <i class="bx bx-user"></i><span>Profile</span>
+  </a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+/* =====================
+        SALDO GLOBAL 
+===================== */
+const saldo = Number(localStorage.getItem("saldoTasquirre") || 0);
+
+document.getElementById("walletAmount").innerText =
+  saldo.toLocaleString("id-ID",{
+    style:"currency",
+    currency:"IDR",
+    minimumFractionDigits:2
+  });
+
+/* ======================
+         TOAST
+====================== */
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),1800);
+}
+
+/* ======================
+   DUMMY TASK ACTIONS
+====================== */
+function acceptDummyTask(){
+  // Simpan task ke localStorage sebagai task yang sedang dikerjakan
+  const task = {
+    id:"TSQ-X71P9",
+    jobdesk:"Copywriting 2 halaman A4",
+    user:"Teresa",
+    price:80000,
+    status:"ongoing",     // ongoing | submitted | waiting_confirm | completed
+    progress:25,          // mulai dari 25% (update 4x sampai 100)
+    createdAt:Date.now()
+  };
+  localStorage.setItem("partnerTaskTasquirre", JSON.stringify(task));
+
+  // Hilangkan kartu dari "Task Masuk" (demo)
+  const card = document.getElementById("dummyTaskCard");
+  if(card){
+    card.remove();
+  }
+
+  showToast("Task diterima!");
+
+  // Redirect ke halaman detail ongoing
+  setTimeout(()=>{
+    const f=document.getElementById("frame");
+    f.classList.add("fade-out");
+    setTimeout(()=>{
+      window.location.href = `taskongoing.html?id=${encodeURIComponent(task.id)}`;
+    },450);
+  },900);
+}
+
+function rejectDummyTask(){
+  // Hapus kartu dari home
+  const card = document.getElementById("dummyTaskCard");
+  if(card){
+    card.remove();
+  }
+
+  // Bisa juga bersihkan task partner demo
+  localStorage.removeItem("partnerTaskTasquirre");
+
+  document.getElementById("taskList").innerHTML = `
+    <div style="padding:1rem;color:var(--text-sub);font-size:0.85rem;">
+      Belum ada tugas masuk
+    </div>
+  `;
+
+  showToast("Task ditolak!");
+}
+
+/* ======================
+     NAVIGATION
+====================== */
+function openNotif(){
+  document.getElementById("frame").classList.add("fade-out");
+  setTimeout(()=>window.location.href="notificationpartner.html",450);
+}
+
+function goTopup(){
+  const f = document.getElementById("frame");
+  f.classList.add("fade-out");
+  // from=partner supaya selesai top up balik ke partner
+  setTimeout(()=>window.location.href="topup.html?from=partner",450);
+}
+
+function switchUser(){
+  document.getElementById("frame").classList.add("fade-out");
+  setTimeout(()=>window.location.href="home.html",450);
+}
+
+/* ======================
+   ANALYTICS CHART
+====================== */
+new Chart(document.getElementById("analyticChart"),{
+  type:"bar",
+  data:{
+    labels:["Sen","Sel","Rab","Kam","Jum","Sab","Min"],
+    datasets:[
+      {
+        label:"Pendapatan (Rp)",
+        data:[50000,80000,0,150000,70000,0,0],
+        backgroundColor:"rgba(197,101,44,0.85)",
+        borderRadius:10
+      },
+      {
+        label:"Task Selesai",
+        data:[1,2,0,3,1,0,0],
+        backgroundColor:"rgba(255,206,145,0.9)",
+        borderRadius:10
+      }
+    ]
+  },
+  options:{
+    plugins:{
+      legend:{
+        labels:{color:"#824119",font:{size:10}}
+      }
+    },
+    scales:{
+      x:{ticks:{color:"#824119"}},
+      y:{ticks:{color:"#824119"},beginAtZero:true}
+    }
+  }
+});
+
+/* ======================
+   NOTIFICATION DOT
+====================== */
+const hasNotif = localStorage.getItem("hasPartnerNotif") === "true";
+
+if(hasNotif) {
+  document.getElementById("notifDot").style.display="block";
+} else {
+  document.getElementById("notifDot").style.display="none";
+}
+</script>
+
+</body>
+</html>

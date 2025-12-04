@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasquirre – Chat</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fff6e6;
+      --bg-soft: #ffe8c7;
+      --bg-card: #f6c08b;
+      --bg-card-deep: #c5652c;
+      --text-main: #5a2c13;
+      --text-sub: #a96b3d;
+      --accent: #c5652c;
+      --accent-soft: #ffe1c2;
+      --round-soft: #f1d2b2;
+      --border-soft: #f0d4af;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      padding: 1.5rem 0;
+    }
+
+    body {
+      background: var(--bg);
+      margin: 0;
+      padding: 0;
+      margin-bottom: 30px;
+      margin-top: 6px;
+    }
+
+    .app-header {
+      padding: 0.4rem 1.1rem;
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 428px;
+      min-height: 100vh;
+      background: var(--bg);
+      padding-bottom: 1.8rem;
+      overflow-y: auto;
+      opacity: 1;
+      filter: blur(0px);
+      transition: opacity 0.45s ease, filter 0.45s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .screen.fade-out {
+      opacity: 0;
+      filter: blur(12px);
+    }
+
+    /* HEADER */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 0rem 1.1rem 0.4rem;
+      align-items: center;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-small {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .header-spacer {
+      width: 42px;
+      height: 42px;
+    }
+
+    .app-main {
+      padding: 0rem 1.1rem;
+    }
+
+    /* SEARCH BAR */
+    .main-search {
+      position: relative;
+      width: 100%;
+      z-index: 100;
+      margin-bottom: 1.2rem;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .search-input {
+      flex: 1;
+      background: #fff;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      padding: 0.55rem 0.8rem;
+      gap: 0.4rem;
+    }
+
+    .search-input input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 0.85rem;
+      width: 100%;
+    }
+
+    .search-results {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 100%;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      padding: 0.7rem 0;
+      display: none;
+      z-index: 200;
+    }
+
+    .search-item {
+      padding: 0.9rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    /* CHAT CARD */
+    .chat-card {
+      background: #fff;
+      padding: 1.2rem 1.1rem;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .chat-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .chat-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .chat-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .chat-info { flex: 1; }
+
+    .chat-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .chat-msg {
+      font-size: 0.82rem;
+      color: #986548;
+      margin-top: 4px;
+    }
+
+    .chat-time {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      margin-top: 6px;
+    }
+
+    /* TITLE */
+    .section-title {
+      font-size: 1rem;
+      color: var(--text-main);
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 428px;
+      background: var(--bg-soft);
+      padding: 0.55rem 0.6rem;
+      display: flex;
+      z-index: 100;
+      justify-content: space-around;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .nav-item {
+      color: var(--text-sub);
+      text-align: center;
+      text-decoration: none;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .nav-item i { font-size: 1.35rem; }
+    .nav-item.active { color: var(--accent); font-weight: 600; }
+
+    /* TOAST */
+    .toast-popup {
+      position: fixed;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(197, 82, 43, 0.92);
+      backdrop-filter: blur(6px);
+      padding: 14px 22px;
+      color: #fff;
+      font-size: 0.95rem;
+      border-radius: 18px;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.28);
+      transition: all 0.5s cubic-bezier(.25,.46,.45,1);
+      z-index: 9999;
+    }
+
+    .toast-popup.show {
+      top: 90px;
+      opacity: 1;
+    }
+
+
+    /* PILIHAN FITUR */
+/* PILIHAN FITUR */
+/* PILIHAN FITUR */
+/* PILIHAN FITUR (mirip gambar kedua) */
+.feature-section {
+  margin-top: 0.3rem;
+  margin-bottom: 1.3rem;
+}
+
+.feature-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.7rem;
+}
+
+.feature-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;  /* Diperlebar */
+}
+
+.feature-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: center;
+  white-space: nowrap; /* BIAR TIDAK TURUN BARIS */
+}
+
+.feature-circle {
+  width: 52px;
+  height: 52px;
+  background: var(--round-soft);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.35rem;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+.feature-icon {
+  font-size: 1.2rem;
+  color: var(--accent);
+}
+
+
+
+
+  </style>
+</head>
+
+<body>
+
+<div id="toast" class="toast-popup"></div>
+
+<div class="screen" id="frame">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand-row">
+      <img src="tupai.png.png" class="logo-small" />
+      <span class="brand-name">Tasquirre</span>
+    </div>
+    <div class="header-spacer"></div>
+  </header>
+
+  <main class="app-main">
+
+<!-- SEARCH -->
+<div class="main-search">
+  <div class="search-row">
+    <div class="search-input">
+      <i class="bx bx-search"></i>
+      <input type="text" placeholder="Cari percakapan" id="searchChatInput" />
+    </div>
+  </div>
+  <div id="searchChatResults" class="search-results"></div>
+</div>
+
+<div class="feature-section">
+  <h2 class="feature-title">Pilihan Fitur</h2>
+
+  <div class="feature-row">
+
+    <div class="feature-item" onclick="showToast('Coming Soon')">
+      <div class="feature-circle">
+        <i class='bx bx-envelope feature-icon'></i>
+      </div>
+      <span class="feature-label">Inbox</span>
+    </div>
+
+    <div class="feature-item" onclick="showToast('Coming Soon')">
+      <div class="feature-circle">
+        <i class='bx bx-receipt feature-icon'></i>
+      </div>
+      <span class="feature-label">Vouchers</span>
+    </div>
+
+    <div class="feature-item" onclick="showToast('Coming Soon')">
+      <div class="feature-circle">
+        <i class='bx bx-brain feature-icon'></i>
+      </div>
+      <span class="feature-label">Tasquirre AI</span>
+    </div>
+
+    <div class="feature-item" onclick="showToast('Coming Soon')">
+      <div class="feature-circle">
+        <i class='bx bx-question-mark feature-icon'></i>
+      </div>
+      <span class="feature-label">Help</span>
+    </div>
+
+  </div>
+</div>
+
+
+
+<h2 class="section-title">Your Conversations</h2>
+
+
+
+
+    <!-- CHAT LIST -->
+    <div class="chat-card" data-name="Aiden Sebastian Lawrence" onclick="goChatDetail('aidenchat.html')">
+      <div class="chat-avatar"><img src="aiden.jpg"></div>
+      <div class="chat-info">
+        <p class="chat-name">Aiden Sebastian Lawrence</p>
+        <p class="chat-msg">Boleh kirim filenya?</p>
+        <p class="chat-time">09.14</p>
+      </div>
+    </div>
+
+ 
+
+  </main>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="home.html" class="nav-item"><i class="bx bx-home-alt"></i><span>Home</span></a>
+  <a href="chat.html" class="nav-item active"><i class="bx bx-chat"></i><span>Chat</span></a>
+  <a href="activities.html" class="nav-item"><i class="bx bx-task"></i><span>Activities</span></a>
+  <a href="profile.html" class="nav-item"><i class="bx bx-user"></i><span>Profile</span></a>
+</nav>
+
+<script>
+
+  function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 1800);
+  }
+
+  function goChatDetail(url) {
+    const frame = document.getElementById("frame");
+    frame.classList.add("fade-out");
+    setTimeout(() => window.location.href = url, 450);
+  }
+/* SEARCH CHAT (REAL FILTERING ONLY LIST, NO LAYOUT CHANGE) */
+const chatCards = [...document.querySelectorAll(".chat-card")];
+const searchInput = document.getElementById("searchChatInput");
+const searchResults = document.getElementById("searchChatResults");
+
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.toLowerCase().trim();
+
+  // === FILTER CHAT LIST TANPA UBAH LAYOUT ===
+  chatCards.forEach(card => {
+    const name = card.dataset.name.toLowerCase();
+    card.style.display = name.includes(q) ? "flex" : "none";
+  });
+
+  // === DROPDOWN ===
+  if (q.length === 0) {
+    searchResults.style.display = "none";
+    return;
+  }
+
+  const filtered = chatCards.filter(c => c.dataset.name.toLowerCase().includes(q));
+
+  if (filtered.length === 0) {
+    searchResults.innerHTML = `
+      <div class="search-item"><i class='bx bx-error'></i> Tidak ada percakapan</div>
+    `;
+    searchResults.style.display = "block";
+    return;
+  }
+
+  searchResults.innerHTML = filtered.map(c => {
+    const url = c.getAttribute("onclick").match(/'(.*?)'/)[1];
+    return `
+      <div class="search-item" onclick="goChatDetail('${url}')">
+        <i class='bx bx-user'></i> ${c.dataset.name}
+      </div>
+    `;
+  }).join("");
+
+  searchResults.style.display = "block";
+});
+
+// CLICK OUTSIDE DROPDOWN
+document.addEventListener("click", e => {
+  if (!searchResults.contains(e.target) && !searchInput.contains(e.target)) {
+    searchResults.style.display = "none";
+  }
+});
+
+
+</script>
+
+</body>
+</html>

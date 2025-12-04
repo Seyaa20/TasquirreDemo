@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasquirre – Physical Task</title>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #fff6e6;
+  --bg-soft: #ffe8c7;
+  --accent: #c5652c;
+  --text-main: #5a2c13;
+  --border-soft: #f0d4af;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  background:var(--bg);
+  font-family:"Poppins",sans-serif;
+  display:flex;
+  justify-content:center;
+  padding:1.5rem 0;
+  min-height:100vh;
+}
+
+.screen{
+  width:100%;
+  max-width:428px;
+  background:var(--bg);
+  min-height:100vh;
+  border-radius:32px;
+  box-shadow:0 24px 60px rgba(0,0,0,0.15);
+  overflow-y:auto;
+  padding-bottom:1rem;
+  opacity:0;
+  transform:translateY(20px);
+  transition:0.35s ease;
+}
+.screen.loaded{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.screen.fade-out {
+  opacity: 0;
+  filter: blur(8px);
+  transition: 0.45s ease;
+}
+
+
+/* HEADER */
+.header{
+  display:flex;
+  align-items:center;
+  gap:0.8rem;
+  padding:1rem 1.2rem 0.3rem;
+}
+
+.back-btn{
+  width:42px;height:42px;
+  background:var(--bg-soft);
+  border-radius:999px;
+  display:flex;justify-content:center;align-items:center;
+  border:none;font-size:1.4rem;
+  color:var(--accent);
+  cursor:pointer;
+}
+
+/* SEARCH */
+.search-area{
+  padding:0.8rem 1.2rem 0;
+  position:relative;
+  z-index:20;
+}
+
+.search-input{
+  background:#fff;
+  border-radius:999px;
+  border:1px solid var(--border-soft);
+  display:flex;
+  align-items:center;
+  padding:0.55rem 0.8rem;
+  gap:0.4rem;
+}
+
+.search-input input{
+  width:100%;
+  border:none;
+  outline:none;
+  font-size:0.9rem;
+  background:transparent;
+}
+
+.search-results{
+  position:absolute;
+  top:calc(100% + 6px);
+  left:1.2rem;
+  width:calc(100% - 2.4rem);
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
+  padding:0.7rem 0;
+  display:none;
+}
+
+.search-item{
+  padding:0.9rem 1rem;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:var(--text-main);
+  font-size:0.9rem;
+  cursor:pointer;
+}
+
+.header-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.3px;
+}
+
+
+/* LIST */
+.task-list{padding:1rem 1.2rem;}
+
+.task-card{
+  background:#fff;
+  padding:1.3rem 1.2rem;
+  border-radius:18px;
+  margin-bottom:1.4rem;
+  box-shadow:0 6px 16px rgba(0,0,0,0.08);
+  display:flex;
+  gap:1.4rem;
+  cursor:pointer;
+  transition:0.25s ease;
+}
+.task-card:hover{transform:translateY(-4px)}
+
+.task-thumb{
+  width:70px;height:70px;
+  border-radius:14px;overflow:hidden;
+}
+.task-thumb img{width:100%;height:100%;object-fit:cover}
+
+.task-title{
+  font-size:1rem;
+  font-weight:700;
+  color:var(--text-main);
+  margin-bottom:4px;
+}
+
+.task-desc{
+  font-size:0.78rem;
+  color:#986548;
+  margin-bottom:15px;
+}
+
+.price{
+  font-size:0.9rem;
+  font-weight:700;
+  color:var(--accent);
+}
+</style>
+</head>
+
+<body>
+
+<div class="screen" id="screen">
+
+  <div class="header">
+    <button class="back-btn" onclick="goBack()"><i class='bx bx-arrow-back'></i></button>
+    <span class="header-title">Physical Task</span>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-area">
+    <div class="search-input">
+      <i class='bx bx-search'></i>
+      <input type="text" id="searchBox" placeholder="Cari pekerjaan...">
+    </div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
+  <!-- LIST -->
+  <div class="task-list" id="taskList"></div>
+
+</div>
+
+<script>
+window.onload = () => {
+  document.getElementById("screen").classList.add("loaded");
+  loadTaskList();
+};
+
+/* SUBCATEGORY LIST (saat ini cuma 1 tapi scalable nanti) */
+const subTasks = [
+  { job:"Bersih-Bersih Rumah", desc:"Menyapu, mengepel, merapikan ruangan", price:20000, img:"physicaltask.jpeg" }
+];
+
+/* LOAD LIST */
+function loadTaskList(){
+  const box=document.getElementById("taskList");
+  box.innerHTML=subTasks.map(t=>`
+    <div class="task-card" onclick="goDetail()">
+      <div class="task-thumb"><img src="${t.img}"></div>
+      <div class="task-info">
+        <div class="task-title">${t.job}</div>
+        <div class="task-desc">${t.desc}</div>
+        <div class="price">Mulai dari Rp ${t.price.toLocaleString("id-ID")}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* SEARCH */
+<!-- SEARCH -->
+const searchBox = document.getElementById("searchBox");
+const searchDropdown = document.getElementById("searchResults");
+
+searchBox.addEventListener("input", () => {
+  const q = searchBox.value.toLowerCase().trim();
+  searchDropdown.style.display = "block";
+
+  if (q.length === 0){
+    searchDropdown.innerHTML =
+      `<div class="search-item"><i class='bx bx-error'></i> Ketik nama pekerjaan</div>`;
+    return;
+  }
+
+  const filtered = subTasks.filter(t =>
+    t.job.toLowerCase().includes(q)
+  );
+
+  if (filtered.length === 0){
+    searchDropdown.innerHTML =
+      `<div class="search-item"><i class='bx bx-error'></i> Tidak ada hasil</div>`;
+    return;
+  }
+
+  searchDropdown.innerHTML = filtered
+    .map(t => `
+      <div class="search-item" onclick="chooseJob('${t.job}')">
+        <i class='bx bx-briefcase'></i> ${t.job}
+      </div>
+    `)
+    .join("");
+});
+
+function chooseJob(job){
+  searchBox.value = job;
+  searchDropdown.style.display = "none";
+}
+
+/* CLICK OUTSIDE TO CLOSE DROPDOWN */
+document.addEventListener("click", function(e){
+  const area = document.querySelector(".search-area");
+  if (!area.contains(e.target)){
+    searchDropdown.style.display = "none";
+  }
+});
+
+
+/* DETAIL */
+function goDetail(){
+  window.location.href="bersihrumah.html";
+}
+
+/* BACK */
+function goBack() {
+  const sc = document.getElementById("screen");
+  sc.classList.add("fade-out");
+
+  setTimeout(() => {
+    window.location.href = "home.html";
+  }, 450);
+}
+
+</script>
+
+</body>
+</html>

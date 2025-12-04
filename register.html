@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasquirre – Register</title>
+
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+<style>
+    :root {
+      --bg: #fff6e6;
+      --text-main: #5a2c13;
+      --text-sub: #a96b3d;
+      --accent: #c5652c;
+      --panel-grad: linear-gradient(180deg, #FFE7CB, #F0B580);
+
+      --toast-success: rgba(197, 101, 44, 0.93);
+      --toast-error: rgba(197, 101, 44, 0.93);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .phone-frame {
+      width: 100%;
+      max-width: 428px;
+      min-height: 100vh;
+      background: var(--bg);
+      padding: 1.5rem;
+      position: relative;
+      overflow-y: auto;
+
+      opacity: 1;
+      filter: blur(0px);
+      transition: opacity 0.45s ease, filter 0.45s ease;
+    }
+
+    .phone-frame.fade-out {
+      opacity: 0;
+      filter: blur(12px);
+    }
+
+    /* BACK BUTTON */
+    .icon-back {
+      position: absolute;
+      top: 90px;
+      left: 22px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: none;
+      background: #b5522b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+      font-size: 1.9rem;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    /* HEADER */
+    .welcome-block {
+      text-align: center;
+      line-height: 1.05;
+      display: flex;
+      flex-direction: column;
+      margin-top: 4.5rem;
+    }
+
+    .w-top { font-size: 2.6rem; font-weight: 700; color: var(--text-main); }
+    .w-mid { font-size: 1.1rem; color: var(--text-sub); margin-top: -2px; margin-bottom: -2px; }
+    .w-bottom { font-size: 2.6rem; font-weight: 700; color: var(--accent); }
+
+    .subtitle-line {
+      font-size: 1.05rem;
+      color: var(--text-sub);
+      margin: 0.4rem 0 1rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .header-logo {
+      width: 220px;
+      display: block;
+      margin: 0.8rem auto 1.2rem;
+    }
+
+    /* PANEL */
+    .auth-panel {
+      margin-top: 1.5rem;
+      background: var(--panel-grad);
+      padding: 1.8rem 1.4rem 1.4rem;
+      border-radius: 28px;
+      box-shadow: 0 18px 36px rgba(197, 101, 44, 0.25);
+      margin-left: 0.4rem;
+      margin-right: 0.4rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1.3rem;
+    }
+
+    .field-label {
+      font-size: 0.97rem;
+      color: var(--text-main);
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 0.95rem;
+      background: #fff;
+      border-radius: 14px;
+      font-size: 1rem;
+      color: var(--text-main);
+      border: none;
+      outline: none;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+      transition: 0.2s ease;
+      margin-bottom: 1rem;
+    }
+
+    .input-wrapper input:focus {
+      box-shadow: 0 6px 18px rgba(197,101,44,0.22);
+      transform: translateY(-1px);
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      margin-bottom: 1.2rem;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 0.95rem;
+      background: linear-gradient(145deg, #c5652c, #f4984a);
+      color: #fff;
+      font-size: 1.05rem;
+      border-radius: 999px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(197, 101, 44, 0.4);
+      margin-top: 0.4rem;
+    }
+
+    .link-row {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+    }
+
+    .link-row a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      max-width: 330px;
+      transform: translate(-50%, -50%) scale(0.85);
+      padding: 22px 20px;
+      border-radius: 20px;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.4s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+</style>
+</head>
+
+<body>
+
+  <div class="phone-frame">
+
+    <button class="icon-back" onclick="goLogin()">
+      <i class="bx bx-chevron-left"></i>
+    </button>
+
+    <h1 class="welcome-block">
+      <span class="w-top">Welcome</span>
+      <span class="w-mid">to</span>
+      <span class="w-bottom">Tasquirre</span>
+    </h1>
+
+    <p class="subtitle-line">“Open for All, Done by All”</p>
+    <img src="tupai.png.png" class="header-logo" />
+
+    <section class="auth-panel">
+      <h2 class="section-title">Register</h2>
+
+      <form onsubmit="event.preventDefault(); validateRegister();">
+
+        <label class="field-label">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="email" required placeholder="Enter your email" />
+        </div>
+
+        <label class="field-label">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="pw1" required placeholder="Enter your password" />
+        </div>
+
+        <label class="field-label">Confirm Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="pw2" required placeholder="Confirm your password" />
+        </div>
+
+        <label class="checkbox">
+          <input type="checkbox" onclick="togglePasswords()" /> Show password
+        </label>
+
+        <button class="primary-btn" type="submit">Register</button>
+      </form>
+
+      <p class="link-row">
+        Sudah punya akun?
+        <a href="#" onclick="goLogin(); return false;">Login di sini</a>
+      </p>
+    </section>
+
+  </div>
+
+  <!-- UNIVERSAL TOAST -->
+  <div id="toast" class="toast"></div>
+
+<script>
+  function smoothGo(url) {
+    const frame = document.querySelector(".phone-frame");
+    frame.classList.add("fade-out");
+    setTimeout(() => window.location.href = url, 450);
+  }
+
+  function goLogin() { smoothGo("login.html"); }
+
+  function togglePasswords() {
+    const pw1 = document.getElementById("pw1");
+    const pw2 = document.getElementById("pw2");
+    const type = pw1.type === "password" ? "text" : "password";
+    pw1.type = type;
+    pw2.type = type;
+  }
+
+  /* ================================
+     PASSWORD VALIDATION
+  ================================= */
+  function validateRegister() {
+    const pw1 = document.getElementById("pw1").value;
+    const pw2 = document.getElementById("pw2").value;
+    const toast = document.getElementById("toast");
+
+    // ERROR: password beda → muncul toast merah
+    if (pw1 !== pw2) {
+      toast.innerHTML = "Passwords do not match  (X)";
+      toast.style.background = "var(--toast-error)";
+      toast.classList.add("show");
+
+      setTimeout(() => toast.classList.remove("show"), 2000);
+      return; // stop register
+    }
+
+    // SUCCESS → toast cokelat
+    toast.innerHTML = "Account created successfully 🎉✨";
+    toast.style.background = "var(--toast-success)";
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+      smoothGo("login.html");
+    }, 2200);
+  }
+
+  /* BLOCK direct access */
+  if (document.referrer === "" || !document.referrer.includes("login.html")) {
+    // window.location.href = "login.html";
+  }
+
+  history.pushState(null, null, location.href);
+  window.addEventListener("popstate", () => {
+    window.location.href = "login.html";
+  });
+
+</script>
+
+</body>
+</html>

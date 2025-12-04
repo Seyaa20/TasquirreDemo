@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tasquirre – Partner Notifications</title>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+<style>
+:root {
+  --bg: #fff6e6;
+  --bg-soft: #ffe8c7;
+  --round-soft: #f1d2b2;
+  --text-main: #5a2c13;
+  --text-sub: #a96b3d;
+  --accent: #c5652c;
+  --accent-deep: #824119;
+  --border-soft: #f0d4af;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
+
+body{
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:1.5rem 0;
+}
+
+/* === WRAPPER === */
+.screen{
+  width:100%;
+  max-width:428px;
+  min-height:100vh;
+  background:var(--bg);
+  padding-bottom:2.2rem;
+  overflow-y:auto;
+  position:relative;
+  transition:opacity .45s ease, filter .45s ease;
+}
+
+.screen.fade-out{
+  opacity:0;
+  filter:blur(10px);
+}
+
+/* === HEADER === */
+.app-header{
+  display:flex;
+  justify-content:left;
+  align-items:center;
+  padding:0.7rem 1.1rem;
+}
+
+.brand-row{
+  display:flex;
+  align-items:center;
+  gap:0.45rem;
+}
+
+.header-title{
+    padding-left: 15px;
+  font-size:1.4rem;
+  font-weight:700;
+  color:var(--accent);
+}
+
+.back-btn{
+  width:42px;height:42px;
+  display:flex;
+  justify-content:center;align-items:center;
+  background:var(--round-soft);
+  border:none;
+  border-radius:50%;
+  font-size:1.3rem;
+  cursor:pointer;
+  color:var(--accent);
+}
+
+/* === NOTIF LIST === */
+.section-title{
+  margin:1rem 1.1rem .6rem;
+  font-size:1rem;font-weight:600;
+  color:var(--text-main);
+}
+
+.notif-card{
+  background:#fff;
+  margin:.6rem 1.1rem;
+  padding:1rem;
+  border-radius:18px;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+.notif-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:.2rem;
+}
+
+.notif-job{
+  font-size:1rem;
+  font-weight:600;
+}
+
+.notif-meta{
+  font-size:.78rem;
+  color:var(--text-sub);
+  margin-top:4px;
+}
+
+.status-chip{
+  display:inline-block;
+  padding:.25rem .7rem;
+  border-radius:999px;
+  background:rgba(255,186,132,.38);
+  color:var(--accent);
+  font-size:.75rem;
+  margin-top:.25rem;
+}
+
+.notif-btn-row{
+  display:flex;
+  gap:.5rem;
+  margin-top:.8rem;
+}
+
+.notif-btn{
+  flex:1;
+  padding:.6rem 0;
+  border-radius:999px;
+  border:none;
+  font-size:.8rem;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.notif-btn.accept{
+  background:var(--accent);
+  color:#fff;
+}
+
+.notif-btn.reject{
+  background:#fff;
+  border:1.4px solid var(--accent);
+  color:var(--accent);
+}
+
+/* === TOAST === */
+.toast-popup{
+  position:fixed;
+  top:-80px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(197,82,43,.92);
+  padding:13px 18px;
+  border-radius:18px;
+  color:#fff;
+  opacity:0;
+  transition:.45s ease;
+  z-index:9999;
+}
+
+.toast-popup.show{
+  top:90px;
+  opacity:1;
+}
+
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast-popup">Action</div>
+
+<div class="screen" id="frame">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <button class="back-btn" onclick="goBack()">
+      <i class="bx bx-arrow-back"></i>
+    </button>
+
+    <div class="header-title">Notifikasi Task</div>
+  </header>
+
+  <!-- NOTIF SECTION -->
+  <h2 class="section-title">Task Baru Masuk</h2>
+
+  <div id="notifList">
+
+    <!-- CARD 1 -->
+    <div class="notif-card">
+      <div class="notif-row">
+        <span class="notif-job">Copywriting IG Caption</span>
+        <span style="font-size:.75rem;color:var(--accent)">TSQ-X81A9</span>
+      </div>
+
+      <p class="notif-meta">
+        Dari: Teresa<br>
+        Waktu: 18 Des 2025 • 10.24
+      </p>
+
+      <span class="status-chip">Task Masuk</span>
+
+      <div class="notif-btn-row">
+        <button class="notif-btn accept" onclick="acceptTask()">Accept</button>
+        <button class="notif-btn reject" onclick="rejectTask()">Reject</button>
+      </div>
+    </div>
+
+
+    <!-- CARD 2 -->
+    <div class="notif-card">
+      <div class="notif-row">
+        <span class="notif-job">Bersih-bersih Rumah</span>
+        <span style="font-size:.75rem;color:var(--accent)">TSQ-M62J3</span>
+      </div>
+
+      <p class="notif-meta">
+        Dari: Aiden<br>
+        Waktu: 18 Des 2025 • 09.51
+      </p>
+
+      <span class="status-chip">Task Masuk</span>
+
+      <div class="notif-btn-row">
+        <button class="notif-btn accept" onclick="acceptTask()">Accept</button>
+        <button class="notif-btn reject" onclick="rejectTask()">Reject</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+// Hapus tanda notif begitu halaman notif dibuka
+localStorage.setItem("hasPartnerNotif","false");
+
+
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),1800);
+}
+
+function goBack(){
+  const f=document.getElementById("frame");
+  f.classList.add("fade-out");
+  setTimeout(()=>window.location.href="homepartner.html",450);
+}
+
+function acceptTask(){
+  showToast("Task diterima!");
+}
+
+function rejectTask(){
+  showToast("Task ditolak!");
+}
+
+
+
+</script>
+
+</body>
+</html>

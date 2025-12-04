@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasquirre – Profile</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fff6e6;
+      --bg-soft: #ffe8c7;
+      --text-main: #5a2c13;
+      --text-sub: #a96b3d;
+      --accent: #c5652c;
+      --border-soft: #f0d4af;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      font-family: "Poppins", sans-serif;
+      padding-bottom: 90px; /* space for bottom nav */
+      min-height: 100vh;
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 428px;
+      min-height: 100vh;
+      background: var(--bg);
+      padding-bottom: 2.5rem;
+    }
+
+    /* HEADER (tidak diutak-atik) */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 1.1rem 0.4rem;
+      align-items: center;
+    }
+
+    .brand-row { display: flex; align-items: center; gap: 0.5rem; }
+    .logo-small { width: 60px; height: 60px; object-fit: contain; }
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .header-spacer { width: 42px; height: 42px; }
+
+    /* MAIN WRAPPER */
+    .app-main { padding: 0 1.2rem; }
+
+    /* PROFILE CARD */
+    .profile-header-card {
+      background: #fff;
+      padding: 1.4rem;
+      border-radius: 22px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.09);
+      margin-bottom: 1.6rem;
+    }
+
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .avatar-photo {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: url("assets/profile-placeholder.jpg") center/cover;
+      border: 3px solid var(--bg-soft);
+    }
+
+    .profile-name {
+      font-size: 1.2rem;
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .profile-stats {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    .tag-gold {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 12px;
+      background: linear-gradient(135deg, #dfb16b, #c9973b);
+      color: white;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .profile-contact {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-main);
+      line-height: 1.45rem;
+    }
+
+    /* SECTIONS */
+    .profile-section { margin-bottom: 1.6rem; }
+
+    .profile-section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.7rem;
+    }
+
+    /* CARD LIST */
+    .card-list {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden; /* FIX sudut */
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .row-item {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      font-size: 0.92rem;
+      color: var(--text-main);
+      background: #fff;
+      border: none;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .row-item:last-child { border-bottom: none; }
+
+    .row-item i {
+      font-size: 1.35rem;
+      color: var(--accent);
+    }
+
+    /* BOTTOM NAV (fixed, tidak diubah strukturnya) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 428px;
+      background: var(--bg-soft);
+      padding: 0.55rem 0.6rem;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid var(--border-soft);
+      z-index: 999;
+    }
+
+    .nav-item {
+      color: var(--text-sub);
+      text-align: center;
+      text-decoration: none;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .nav-item i { font-size: 1.35rem; }
+    .nav-item.active { color: var(--accent); font-weight: 600; }
+
+  </style>
+</head>
+
+<body>
+<div class="screen">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand-row">
+      <img src="tupai.png.png" class="logo-small" />
+      <span class="brand-name">Tasquirre</span>
+    </div>
+    <div class="header-spacer"></div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="app-main">
+
+    <!-- PROFILE TOP -->
+    <section class="profile-header-card">
+      <div class="profile-top">
+        <div class="avatar-photo"></div>
+
+        <div>
+          <h2 class="profile-name">Teresa Fransciscus</h2>
+          <p class="profile-stats">1 Pengikut • 1 Mengikuti</p>
+          <span class="tag-gold">GOLD</span>
+        </div>
+      </div>
+
+      <p class="profile-contact">
+        Email: codeworkforteresa@gmail.com<br>
+        Phone Number: +6289682937780
+      </p>
+    </section>
+
+    <!-- Preferensi -->
+    <section class="profile-section">
+      <h2 class="profile-section-title">Preferensi</h2>
+      <div class="card-list">
+        <button class="row-item"><span>Keamanan akun</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Quillet</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Alamat tersimpan</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Task tersimpan</span><i class="bx bx-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- Pengaturan -->
+    <section class="profile-section">
+      <h2 class="profile-section-title">Pengaturan Aplikasi</h2>
+      <div class="card-list">
+        <button class="row-item"><span>Ikon dan tema aplikasi</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Bahasa</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Aksesibilitas</span><i class="bx bx-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- Lebih Banyak -->
+    <section class="profile-section">
+      <h2 class="profile-section-title">Lebih Banyak dari Tasquirre</h2>
+      <div class="card-list">
+        <button class="row-item"><span>Profil bisnis</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Gabung jadi Partner Tasquirre</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Ajak teman, dapat voucher</span><i class="bx bx-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- Lainnya -->
+    <section class="profile-section">
+      <h2 class="profile-section-title">Lainnya</h2>
+      <div class="card-list">
+        <button class="row-item"><span>Bantuan & laporan</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Ketentuan layanan</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Kebijakan privasi</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Beri rating</span><i class="bx bx-chevron-right"></i></button>
+        <button class="row-item"><span>Atur akun</span><i class="bx bx-chevron-right"></i></button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item"><i class="bx bx-home-alt"></i><span>Home</span></a>
+    <a href="chat.html" class="nav-item"><i class="bx bx-chat"></i><span>Chat</span></a>
+    <a href="activities.html" class="nav-item"><i class="bx bx-task"></i><span>Activities</span></a>
+    <a href="profile.html" class="nav-item active"><i class="bx bx-user"></i><span>Profile</span></a>
+  </nav>
+
+</div>
+</body>
+</html>

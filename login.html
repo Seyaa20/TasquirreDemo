@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasquirre – Login</title>
+
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fff6e6;
+      --text-main: #5a2c13;
+      --text-sub: #a96b3d;
+      --accent: #c5652c;
+      --panel-grad: linear-gradient(180deg, #FFE7CB, #F0B580);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* BODY FIX — supaya toast selalu center viewport */
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* WRAPPER supaya phone-frame tetap center */
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      padding-top: 1rem;
+    }
+
+    /* PHONE SCREEN */
+    .screen {
+      width: 100%;
+      max-width: 428px;
+      min-height: 100vh;
+      background: var(--bg);
+      padding: 1.5rem;
+
+      overflow-y: auto;
+
+      opacity: 1;
+      filter: blur(0px);
+      transition: opacity 0.45s ease, filter 0.45s ease;
+    }
+
+    .screen.fade-out {
+      opacity: 0;
+      filter: blur(12px);
+    }
+
+    /* HEADER */
+    .welcome-block {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+      margin-bottom: 0.6rem;
+    }
+
+    .w-top { font-size: 2.6rem; font-weight: 700; color: var(--text-main); }
+    .w-mid { font-size: 1.1rem; color: var(--text-sub); margin-top: -2px; margin-bottom: -2px; }
+    .w-bottom { font-size: 2.6rem; font-weight: 700; color: var(--accent); }
+
+    .subtitle-line {
+      margin-top: 0.2rem;
+      margin-bottom: 0.9rem;
+      font-size: 1.05rem;
+      color: var(--text-sub);
+      text-align: center;
+      font-style: italic;
+    }
+
+    .header-logo {
+      width: 220px;
+      display: block;
+      margin: 0.6rem auto 1rem;
+    }
+
+    /* LOGIN PANEL */
+    .auth-panel {
+      margin-top: 1.5rem;
+      background: var(--panel-grad);
+      padding: 1.8rem 1.4rem 1.4rem;
+      border-radius: 28px;
+      box-shadow: 0 18px 36px rgba(197, 101, 44, 0.25);
+      margin-left: 0.4rem;
+      margin-right: 0.4rem;
+    }
+
+    .section-title {
+      font-size: 1.45rem;
+      margin-bottom: 1.2rem;
+      color: var(--accent);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .btn-social {
+      width: 100%;
+      border: none;
+      padding: 0.85rem 1rem;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 0.75rem;
+      gap: 8px;
+    }
+
+    .google { background: #fff; border: 1px solid #ddd; color: #444; }
+    .fb { background: #3b5998; color: #fff; }
+
+    .divider-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-sub);
+      margin: 1rem 0;
+    }
+
+    .divider-row span {
+      flex: 1;
+      height: 1px;
+      background: rgba(199,101,40,0.35);
+    }
+
+    .field-label {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 0.85rem;
+      border-radius: 12px;
+      border: 1px solid rgba(199,101,40,0.35);
+      background: #fff;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      outline: none;
+    }
+
+    .small-row {
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .small-link {
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(145deg, #c5652c, #f4984a);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(197, 101, 44, 0.4);
+    }
+
+    .link-row {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      text-align: center;
+    }
+
+    .link-row a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    /* TOAST FIX — always center screen */
+    .toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.85);
+
+      width: 80%;
+      max-width: 320px;
+
+      background: rgba(197, 101, 44, 0.95);
+      color: #fff;
+      padding: 20px 22px;
+      border-radius: 18px;
+
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.45;
+
+      opacity: 0;
+      pointer-events: none;
+
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+
+      z-index: 999999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <div class="screen">
+
+      <header class="simple-header">
+        <h1 class="welcome-block">
+          <span class="w-top">Welcome</span>
+          <span class="w-mid">to</span>
+          <span class="w-bottom">Tasquirre</span>
+        </h1>
+
+        <p class="subtitle-line">“Open for All, Done by All”</p>
+
+        <img src="tupai.png.png" class="header-logo" />
+      </header>
+
+      <main class="auth-main">
+        <section class="auth-panel">
+
+          <h2 class="section-title">Login</h2>
+
+          <button class="btn-social google" onclick="goHome()">
+            <i class="bx bxl-google"></i> Continue with Google
+          </button>
+
+          <button class="btn-social fb" onclick="goHome()">
+            <i class="bx bxl-facebook"></i> Continue with Facebook
+          </button>
+
+          <div class="divider-row">
+            <span></span><p>atau</p><span></span>
+          </div>
+
+          <form onsubmit="event.preventDefault(); goHome();">
+
+            <label class="field-label">Email</label>
+            <div class="input-wrapper">
+              <input type="email" required placeholder="Enter your email" />
+            </div>
+
+            <label class="field-label">Password</label>
+            <div class="input-wrapper">
+              <!-- 🔥 kasih id khusus -->
+              <input id="loginPw" type="password" required placeholder="Enter your password" />
+            </div>
+
+            <div class="small-row">
+              <label class="checkbox">
+                <input type="checkbox" onclick="togglePassword()" /> Show password
+              </label>
+              <span class="small-link" onclick="resetPassword()">Forgot password</span>
+            </div>
+
+            <button class="primary-btn" type="submit">Login</button>
+          </form>
+
+          <p class="link-row small">
+            Belum punya akun?
+            <a href="#" onclick="goRegister(); return false;">Daftar di sini</a>
+          </p>
+
+        </section>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Toast di luar screen → always centered viewport -->
+  <div id="toast" class="toast">Link reset password sudah dikirim ke email</div>
+
+  <script>
+    function smoothGo(url) {
+      const screen = document.querySelector(".screen");
+      screen.classList.add("fade-out");
+      setTimeout(() => { window.location.href = url; }, 450);
+    }
+
+    function goHome() { smoothGo("home.html"); }
+    function goRegister() { smoothGo("register.html"); }
+
+    function togglePassword() {
+      const pw = document.getElementById("loginPw");
+      if (!pw) return;
+      pw.type = pw.type === "password" ? "text" : "password";
+    }
+
+    function resetPassword() {
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+  </script>
+
+</body>
+</html>

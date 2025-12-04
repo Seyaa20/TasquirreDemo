@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tasquirre – Partner Profile</title>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+<style>
+:root {
+  --bg: #fff6e6;
+  --bg-soft: #ffe8c7;
+  --round-soft: #f1d2b2;
+  --text-main: #5a2c13;
+  --text-sub: #a96b3d;
+  --accent: #c5652c;
+  --accent-deep: #824119;
+  --border-soft: #f0d4af;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
+
+body{
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:1.5rem 0;
+}
+
+.screen{
+  width:100%;
+  max-width:428px;
+  min-height:100vh;
+  background:var(--bg);
+  padding-bottom:2.8rem;
+  overflow-y:auto;
+}
+
+/* HEADER */
+.app-header{
+  padding:0.8rem 1.1rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.header-title{
+  font-size:1.2rem;
+  font-weight:700;
+  color:var(--accent);
+}
+
+/* PROFILE CARD */
+.profile-card{
+  background:#fff;
+  margin:0.6rem 1.1rem 1rem;
+  padding:1.2rem 1.1rem;
+  border-radius:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  display:flex;
+  gap:0.9rem;
+}
+
+.avatar{
+  width:70px;height:70px;
+  border-radius:50%;
+  background:#ffe8c7;
+  display:flex;justify-content:center;align-items:center;
+  font-size:2.1rem;
+  color:var(--accent-deep);
+}
+
+.profile-main{
+  flex:1;
+}
+
+.profile-name{
+  font-size:1.05rem;
+  font-weight:600;
+  color:var(--text-main);
+}
+
+.profile-role{
+  font-size:0.8rem;
+  color:var(--text-sub);
+  margin-top:3px;
+}
+
+.profile-rating{
+  margin-top:6px;
+  font-size:0.8rem;
+  color:var(--accent-deep);
+}
+
+/* INFO LIST */
+.section-title{
+  margin:0.2rem 1.1rem 0.5rem;
+  font-size:0.95rem;
+  font-weight:600;
+  color:var(--text-main);
+}
+
+.info-card{
+  background:#fff;
+  margin:0 1.1rem 1rem;
+  padding:0.9rem 1rem;
+  border-radius:16px;
+  box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:0.4rem;
+  font-size:0.82rem;
+  color:var(--text-main);
+}
+
+.info-label{
+  color:var(--text-sub);
+}
+
+.chip{
+  display:inline-block;
+  padding:0.22rem 0.7rem;
+  border-radius:999px;
+  background:#ffe8c7;
+  font-size:0.75rem;
+  color:var(--accent-deep);
+  margin-right:4px;
+  margin-bottom:4px;
+}
+
+/* LOGOUT BTN (DEMO) */
+.logout-btn{
+  width:calc(100% - 2.2rem);
+  margin:0 1.1rem 1.4rem;
+  padding:0.7rem 0;
+  border-radius:999px;
+  border:none;
+  background:#fff;
+  color:#b91c1c;
+  font-size:0.85rem;
+  font-weight:600;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+  cursor:pointer;
+}
+
+/* NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:428px;
+  background:var(--bg-soft);
+  border-top:1px solid var(--border-soft);
+  padding:0.6rem 0;
+  display:flex;
+  justify-content:space-around;
+  z-index:100;
+}
+
+.nav-item{
+  text-align:center;
+  text-decoration:none;
+  color:var(--text-sub);
+  font-size:0.75rem;
+  display:flex;
+  flex-direction:column;
+  gap:0.1rem;
+}
+
+.nav-item.active{
+  color:var(--accent);
+  font-weight:600;
+}
+
+.nav-item i{
+  font-size:1.35rem;
+}
+</style>
+</head>
+<body>
+
+<div class="screen">
+
+  <header class="app-header">
+    <div class="header-title">Profile Partner</div>
+    <i class="bx bx-cog" style="font-size:1.4rem;color:var(--text-sub);"></i>
+  </header>
+
+  <section class="profile-card">
+    <div class="avatar">
+      <i class="bx bx-user"></i>
+    </div>
+    <div class="profile-main">
+      <div class="profile-name">Aiden Sebastian</div>
+      <div class="profile-role">Partner • Copywriter & Cleaning Service</div>
+      <div class="profile-rating">
+        <i class="bx bxs-star" style="color:#f59e0b;"></i>
+        4.9 • 52 ulasan
+      </div>
+    </div>
+  </section>
+
+  <h3 class="section-title">Ringkasan</h3>
+  <div class="info-card">
+    <div class="info-row">
+      <span class="info-label">Task selesai</span>
+      <span>34</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Total pendapatan</span>
+      <span id="totalIncome">Rp 0</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Saldo saat ini</span>
+      <span id="saldoNow">Rp 0</span>
+    </div>
+  </div>
+
+  <h3 class="section-title">Keahlian</h3>
+  <div class="info-card">
+    <span class="chip">Copywriting</span>
+    <span class="chip">Social Media Caption</span>
+    <span class="chip">Basic Cleaning</span>
+    <span class="chip">Housekeeping</span>
+  </div>
+
+  <button class="logout-btn" onclick="fakeLogout()">
+    Logout (Demo)
+  </button>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="homepartner.html" class="nav-item">
+    <i class="bx bx-home-alt"></i><span>Home</span>
+  </a>
+  <a href="chatpartner.html" class="nav-item">
+    <i class="bx bx-chat"></i><span>Chat</span>
+  </a>
+  <a href="activitiespartner.html" class="nav-item">
+    <i class="bx bx-task"></i><span>Activities</span>
+  </a>
+  <a href="profilepartner.html" class="nav-item active">
+    <i class="bx bx-user"></i><span>Profile</span>
+  </a>
+</nav>
+
+<script>
+/* SALDO */
+const saldo = Number(localStorage.getItem("saldoTasquirre") || 0);
+document.getElementById("saldoNow").textContent =
+  saldo.toLocaleString("id-ID",{style:"currency",currency:"IDR",minimumFractionDigits:2});
+
+/* Total income demo = sama dengan 1 task jika completed */
+let task = JSON.parse(localStorage.getItem("partnerTaskTasquirre") || "null");
+let income = 0;
+if(task && task.status==="completed"){
+  income = Number(task.price||0);
+}
+document.getElementById("totalIncome").textContent =
+  income.toLocaleString("id-ID",{style:"currency",currency:"IDR",minimumFractionDigits:2});
+
+function fakeLogout(){
+  alert("Ini hanya demo. Tidak ada proses logout sebenarnya 😊");
+}
+</script>
+
+</body>
+</html>

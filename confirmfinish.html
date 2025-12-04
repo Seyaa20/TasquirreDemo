@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tasquirre – Task Selesai</title>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+<style>
+:root {
+  --bg: #fff6e6;
+  --bg-soft: #ffe8c7;
+  --round-soft: #f1d2b2;
+  --text-main: #5a2c13;
+  --text-sub: #a96b3d;
+  --accent: #c5652c;
+  --accent-deep: #824119;
+  --border-soft: #f0d4af;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
+
+body{
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:1.5rem 0;
+}
+
+.screen{
+  width:100%;
+  max-width:428px;
+  min-height:100vh;
+  background:var(--bg);
+  padding-bottom:2.4rem;
+  overflow-y:auto;
+  transition:opacity .45s ease,filter .45s ease;
+}
+
+.screen.fade-out{
+  opacity:0;
+  filter:blur(10px);
+}
+
+/* HEADER */
+.app-header{
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+  padding:0.8rem 1.1rem;
+}
+
+.back-btn{
+  width:42px;height:42px;
+  display:flex;
+  justify-content:center;align-items:center;
+  background:var(--round-soft);
+  border:none;
+  border-radius:50%;
+  font-size:1.3rem;
+  cursor:pointer;
+  color:var(--accent);
+}
+
+.header-title{
+  font-size:1.15rem;
+  font-weight:700;
+  color:var(--accent);
+}
+
+/* CONTENT */
+.card{
+  background:#fff;
+  margin:0.7rem 1.1rem;
+  padding:1.4rem 1.2rem 1.3rem;
+  border-radius:20px;
+  box-shadow:0 10px 24px rgba(0,0,0,.12);
+  text-align:center;
+}
+
+.icon-badge{
+  width:70px;height:70px;
+  border-radius:50%;
+  margin:0 auto 0.7rem;
+  background:linear-gradient(135deg,#c5652c,#f4984a);
+  display:flex;justify-content:center;align-items:center;
+  color:#fff;
+  font-size:2.1rem;
+  box-shadow:0 10px 20px rgba(197,101,44,.45);
+}
+
+.title-main{
+  font-size:1.2rem;
+  font-weight:700;
+  color:var(--accent-deep);
+  margin-bottom:0.3rem;
+}
+
+.subtitle{
+  font-size:0.9rem;
+  color:var(--text-sub);
+  margin-bottom:0.9rem;
+}
+
+.saldo-box{
+  background:#fff6e6;
+  border-radius:16px;
+  padding:0.7rem 0.9rem;
+  margin-top:0.4rem;
+}
+
+.saldo-label{
+  font-size:0.78rem;
+  color:var(--text-sub);
+}
+
+.saldo-value{
+  font-size:1rem;
+  font-weight:700;
+  color:var(--accent-deep);
+}
+
+/* BUTTONS */
+.btn-row{
+  display:flex;
+  flex-direction:column;
+  gap:0.6rem;
+  margin-top:1.2rem;
+}
+
+.btn-pill{
+  width:100%;
+  padding:0.7rem 0;
+  border-radius:999px;
+  border:none;
+  font-size:0.85rem;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.btn-primary{
+  background:linear-gradient(145deg,#c5652c,#f4984a);
+  color:#fff;
+}
+
+.btn-secondary{
+  background:#fff;
+  border:1.4px solid var(--accent);
+  color:var(--accent);
+}
+</style>
+</head>
+<body>
+
+<div class="screen" id="frame">
+
+  <header class="app-header">
+    <button class="back-btn" onclick="goActivities()">
+      <i class="bx bx-arrow-back"></i>
+    </button>
+    <div class="header-title">Task Selesai</div>
+  </header>
+
+  <div class="card">
+    <div class="icon-badge">
+      <i class="bx bx-check-double"></i>
+    </div>
+
+    <div class="title-main">Selamat, task selesai!</div>
+    <div class="subtitle">
+      User sudah mengkonfirmasi bahwa task telah selesai.
+      Pendapatanmu sudah masuk ke saldo Tasquirre.
+    </div>
+
+    <div class="saldo-box">
+      <div class="saldo-label">Saldo Tasquirre Saat Ini</div>
+      <div class="saldo-value" id="saldoNow">Rp 0</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-pill btn-primary" onclick="goActivities()">
+        Lihat Aktivitas Partner
+      </button>
+
+      <button class="btn-pill btn-secondary" onclick="goHome()">
+        Kembali ke Home Partner
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const saldo = Number(localStorage.getItem("saldoTasquirre") || 0);
+document.getElementById("saldoNow").textContent =
+  saldo.toLocaleString("id-ID",{
+    style:"currency",
+    currency:"IDR",
+    minimumFractionDigits:2
+  });
+
+function goActivities(){
+  const f=document.getElementById("frame");
+  f.classList.add("fade-out");
+  setTimeout(()=>window.location.href="activitiespartner.html",450);
+}
+function goHome(){
+  const f=document.getElementById("frame");
+  f.classList.add("fade-out");
+  setTimeout(()=>window.location.href="homepartner.html",450);
+}
+</script>
+</body>
+</html>

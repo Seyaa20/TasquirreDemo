@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasquirre – Home</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fff6e6;
+      --bg-soft: #ffe8c7;
+      --bg-card: #f6c08b;
+      --bg-card-deep: #c5652c;
+      --text-main: #5a2c13;
+      --text-sub: #a96b3d;
+      --accent: #c5652c;
+      --accent-soft: #ffe1c2;
+      --round-soft: #f1d2b2;
+      --border-soft: #f0d4af;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ==== AUTH FRAME WRAPPER (SAMA DENGAN LOGIN) ==== */
+    body {
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      padding: 1.5rem 0;
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 428px;
+      min-height: 100vh;
+      background: var(--bg);
+      padding-bottom: 1.8rem;
+
+      overflow-y: auto;
+
+      /* dissolve gentle */
+      opacity: 1;
+      filter: blur(0px);
+      transition: opacity 0.45s ease, filter 0.45s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .screen.fade-out {
+      opacity: 0;
+      filter: blur(12px);
+    }
+
+    /* HEADER */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 0rem 1.1rem 0.4rem;
+      align-items: center;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-small {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .icon-ghost,
+    .icon-filter {
+      border-radius: 999px;
+      border: none;
+      background: var(--round-soft);
+      color: var(--accent);
+      width: 42px;
+      height: 42px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      font-size: 1.2rem;
+    }
+
+    .app-main {
+      padding: 0rem 1.1rem;
+    }
+
+    /* SEARCH BAR */
+    .search-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .search-input {
+      flex: 1;
+      background: #fff;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      padding: 0.55rem 0.8rem;
+      gap: 0.4rem;
+    }
+
+    .search-input input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 0.85rem;
+      width: 100%;
+    }
+
+/* ❗ Dropdown selalu nempel tepat di bawah search bar */
+.main-search {
+  position: relative;
+  width: 100%;
+  z-index: 200;      /* supaya muncul di atas hero */
+}
+
+/* ❗ Ukuran EXACT sama dengan search bar */
+/* ❗ Tidak lagi pakai calc() atau left:50% */
+.search-results {
+  position: absolute;
+  top: calc(100% + 6px); /* sedikit jarak dari search bar */
+  left: 0;
+  width: calc(100% - 50px); /* ⬅️ match tombol filter, 42px + gap */
+  
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  
+  padding: 0.7rem 0;
+  display: none;
+  z-index: 200;
+}
+
+.reco-task-card .task-title {
+  margin-top: 0 !important;
+}
+
+/* ITEM */
+.search-item {
+  padding: 0.9rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+
+.search-item i {
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+
+
+    /* HERO CARD */
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #f4ba7c, #c5652c);
+      padding: 1.1rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("OIP.webp") center/cover no-repeat;
+      opacity: 0.50;
+      z-index: 1;
+    }
+
+    .hero-text,
+    .hero-illustration {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-text h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.28;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.35);
+      letter-spacing: -0.3px;
+    }
+
+    .hero-text ul {
+      font-size: 0.8rem;
+      font-weight: 500;
+      line-height: 1.45;
+      padding-left: 1.2rem;
+      margin-top: 0.4rem;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    }
+
+    .hero-text ul li {
+      margin-bottom: 4px;
+    }
+
+    .hero-illustration img {
+      width: 165px;
+      height: 120px;
+    }
+
+    /* WALLET SECTION */
+    .wallet-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1.1fr;
+      gap: 0.9rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .wallet-card {
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 1.2rem 1.1rem;
+      box-shadow: 0 10px 24px rgba(197, 101, 44, 0.18);
+    }
+
+    .wallet-label {
+      margin-top: 3px;
+      font-size: 1rem;
+      color: var(--text-sub);
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .wallet-amount {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 8px;
+    }
+
+    .wallet-points {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .wallet-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      align-items: stretch;
+    }
+
+    .pill-btn.primary {
+      background: linear-gradient(135deg, #d07234, #c0521d);
+      color: hsl(0, 0%, 100%);
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 0.9rem 1rem;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 10px 20px rgba(197, 101, 44, 0.25);
+      border: none;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .pill-btn.secondary {
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 0.9rem 1rem;
+      font-size: 0.95rem;
+      box-shadow: 0 6px 10px rgba(197, 101, 44, 0.15);
+      border: none;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+    }
+
+.category-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.category-card {
+  width: 100%;
+  background: #c5652c;
+  border-radius: 18px;
+  overflow: hidden;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  box-shadow: 0 6px 12px rgba(0,0,0,0.14);
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.22);
+}
+
+/* GAMBAR */
+.category-card img {
+  width: 100%;
+  height: 78px;          /* sedikit lebih kecil */
+  object-fit: cover;
+}
+
+/* LABEL BAWAH — lebih kecil & lebih pendek */
+.category-card span {
+  width: 100%;
+  text-align: center;
+
+  padding: 0.45rem 0.3rem;  /* lebih kecil */
+  font-size: 0.72rem;        /* teks lebih kecil */
+  font-weight: 600;
+  line-height: 1.1;
+
+  color: #fff;
+  background: #c5652c;
+}
+    /* TASK CARD */
+.task-card {
+  background: linear-gradient(
+    to bottom,
+    #C5652C 0%,     /* paling terang di atas */
+    #B5522B 55%,    /* tengah */
+    #824119 100%    /* paling gelap di bawah */
+  );
+  border-radius: 24px;
+  padding: 1.3rem;
+  margin-bottom: 1.3rem;
+  color: #fff;
+  box-shadow: 0 14px 28px rgba(130, 65, 25, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+
+
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .avatar-circle {
+      width: 50px;
+      height: 50px;
+      background: #ffe2c9;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .task-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .task-id {
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
+
+    .task-title {
+      margin-top: 0.8rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .task-meta {
+      margin-top: 0.2rem;
+      font-size: 0.78rem;
+      opacity: 0.95;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.25);
+      overflow: hidden;
+      margin-top: 0.3rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #fff;
+      border-radius: inherit;
+    }
+
+    .outline-btn {
+      width: 100%;
+      margin-top: 1rem;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid #fff;
+      padding: 0.55rem 0;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    .ghost-btn.full {
+      width: 100%;
+      padding: 0.65rem 0;
+      border: none;
+      background: none;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .see-all {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.7rem 0;
+  margin: 1rem 0 0.5rem;
+  margin-bottom: 1.2rem;
+  color: #C5652C;
+  border: 1.5px solid #C5652C;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+
+    /* RECO CARD */
+/* RECOMMENDATION CARD FIX */
+.reco-task-card {
+  background: #fff;
+  padding: 1.3rem 1.2rem;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;       /* ⬅️ INI YANG BIKIN PAS TENGAH */
+  gap: 1.2rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.reco-task-card:hover {
+  transform: translateY(-3px);
+}
+
+.reco-task-card .task-thumb {
+  width: 70px;
+  height: 70px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.reco-task-card .task-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ensure text style consistent */
+.reco-task-card .task-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.reco-task-card .task-desc {
+  font-size: 0.78rem;
+  color: #986548;
+  margin-bottom: 10px;
+}
+
+.reco-task-card .price {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+
+    /* BOTTOM SHEET FILTER */
+    .filter-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.3s ease;
+      z-index: 9990;
+    }
+
+    .filter-sheet {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      bottom: 0;
+      width: 100%;
+      max-width: 428px;
+      background: #fff;
+      padding: 1.4rem;
+      border-radius: 22px 22px 0 0;
+      box-shadow: 0 -6px 25px rgba(0,0,0,0.18);
+      transition: 0.35s ease;
+      z-index: 9991;
+    }
+
+    .filter-sheet.active {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .filter-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 1rem;
+    }
+
+    .filter-header i {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--accent);
+    }
+
+    .filter-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    .apply-filter {
+      width: 100%;
+      margin-top: 1.2rem;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(145deg, #c5652c, #f4984a);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(197, 101, 44, 0.4);
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 428px;
+      background: var(--bg-soft);
+      padding: 0.55rem 0.6rem;
+      display: flex;
+      z-index: 100;
+      justify-content: space-around;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .nav-item {
+      color: var(--text-sub);
+      text-align: center;
+      text-decoration: none;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .nav-item i { font-size: 1.35rem; }
+    .nav-item.active { color: var(--accent); font-weight: 600; }
+
+
+    .main-search {
+  position: relative;
+  z-index: 100;
+}
+
+
+  
+
+    /* TOAST MESSAGE */
+/* TOAST MESSAGE — muncul di atas */
+/* NEW TOAST — Slide-up blur aesthetic */
+.toast-popup {
+  position: fixed;
+  top: -80px; /* mulai tersembunyi di atas */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  background: rgba(197, 82, 43, 0.92);
+  backdrop-filter: blur(6px);
+
+  padding: 14px 22px;
+  color: #fff;
+  font-size: 0.95rem;
+  border-radius: 18px;
+  
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.28);
+
+  transition: all 0.5s cubic-bezier(.25,.46,.45,1);
+  z-index: 9999;
+}
+
+.toast-popup.show {
+  top: 90px;  /* muncul tepat di area header tsb */
+  opacity: 1;
+}
+
+.toast-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+
+    /*  perbaikan */
+
+    /* FIX HEADER GAP */
+body {
+  background: var(--bg);
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.app-header {
+  padding: 0.4rem 1.1rem;
+}
+
+/* FIX HERO IMAGE RESPONSIVE */
+.hero-illustration img {
+  width: 140px;
+  height: auto;
+}
+
+/* FIX SERVICE CATEGORY GRID DI HP */
+@media (max-width: 420px) {
+  .category-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .category-card img {
+    height: 90px;
+  }
+}
+
+/* FIX BUTTON "SWITCH TO PARTNER" */
+.pill-btn.secondary {
+  white-space: nowrap;
+}
+
+/* FIX SALDO TEXT NOT CENTER */
+.wallet-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 1.1rem;
+}
+
+
+    
+  </style>
+</head>
+
+<body>
+
+  <div id="toast" class="toast-popup">This feature is coming soon</div>
+
+
+<div class="screen" id="frame">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand-row">
+      <img src="tupai.png.png" class="logo-small" />
+      <span class="brand-name">Tasquirre</span>
+    </div>
+<button class="icon-ghost" onclick="openNotifications()" style="position:relative;">
+    <i class="bx bx-bell"></i>
+    <span id="notifDot" style="
+      position:absolute;
+      top:5px;
+      right:5px;
+      width:10px;
+      height:10px;
+      background:#c20000;
+      border-radius:50%;
+      display:none;
+    "></span>
+</button>
+
+  </header>
+
+  <main class="app-main">
+
+    <!-- SEARCH -->
+<div class="main-search">
+  <div class="search-row">
+    <div class="search-input">
+      <i class="bx bx-search"></i>
+      <input type="text" placeholder="Cari layanan" />
+    </div>
+    <button class="icon-filter" onclick="openFilter()">
+      <i class="bx bx-slider-alt"></i>
+    </button>
+  </div>
+
+  <div id="searchResults" class="search-results"></div>
+</div>
+
+    <!-- HERO -->
+    <section class="hero-card">
+      <div class="hero-text">
+        <h1>Where every small task makes big impact</h1>
+        <ul>
+          <li>Inklusif & Kolaboratif</li>
+          <li>Cepat, Aman, dan Transparan</li>
+          <li>Efisien & Fleksibel</li>
+        </ul>
+      </div>
+      <div class="hero-illustration">
+        <img src="tupai2.png" alt="">
+      </div>
+    </section>
+
+    <!-- WALLET -->
+    <section class="wallet-row">
+<div class="wallet-card" onclick="goToSaldoHistory()" style="cursor:pointer;">
+  <p class="wallet-label">Saldo</p>
+  <p id="walletAmount" class="wallet-amount"></p>
+  <p class="wallet-points">2.150 poin</p>
+</div>
+
+
+      <div class="wallet-actions">
+        <button class="pill-btn primary"><i class="bx bx-plus"></i>Top Up</button>
+        <button class="pill-btn secondary">Switch to Partner</button>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+
+     <section>
+      <h2 class="section-title">Service Categories</h2>
+<div class="category-row">
+<button class="category-card" onclick="goDigitalTask()">
+  <img src="digitaltask.jpeg">
+  <span>Digital Task</span>
+</button>
+
+
+ 
+
+<button class="category-card" onclick="goPhysicalTask()">
+  <img src="physicaltask.jpeg">
+  <span>Physical Task</span>
+</button>
+
+
+  <button class="category-card" onclick="comingSoon()">
+    <img src="pinjambarang.jpeg">
+    <span>Pinjam Barang</span>
+  </button>
+
+  <button class="category-card" onclick="comingSoon()">
+    <img src="subscription.jpeg">
+    <span>Subscription</span>
+  </button>
+</div>
+</section>
+
+
+
+    <!-- TASK -->
+    <section>
+      <h2 class="section-title">Recent Task Progress</h2>
+
+      <div class="task-card">
+        <div class="task-header">
+<div class="avatar-circle" style="
+  background: none;
+  overflow: hidden;
+  border-radius: 50%;
+">
+  <img src="aiden.jpg" style="width:100%; height:100%; object-fit: cover;">
+</div>
+          <div>
+            <p class="task-name">Aiden Sebastian Lawrence</p>
+            <p class="task-id">ID: 12345678910</p>
+          </div>
+        </div>
+        <h3 class="task-title">Copywriting</h3>
+        <p class="task-meta">Start: Sat, 18 Sep 2025 • 09.00</p>
+        <div class="progress-row"><span>Progress</span><span>50%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+<button class="outline-btn full" onclick="openTaskDetail()">Lihat Selengkapnya</button>
+      </div>
+
+<button class="see-all" onclick="goActivities()">See All Tasks</button>
+    </section>
+
+    <!-- RECOMMENDATION -->
+    <section>
+      <h2 class="section-title">Rekomendasi Untuk Kamu</h2>
+<!-- REKOMENDASI (MATCHING physicaltask card) -->
+<div class="reco-task-card" onclick="goPhysicalDetail()">
+  <div class="task-thumb">
+    <img src="physicaltask.jpeg" />
+  </div>
+
+  <div class="task-info">
+    <div class="task-title">Bersih-Bersih Rumah</div>
+    <div class="task-desc">Menyapu, mengepel, merapikan ruangan</div>
+    <div class="price">Mulai dari Rp 20.000</div>
+  </div>
+</div>
+
+
+
+
+
+    </section>
+
+  </main>
+
+</div>
+
+<!-- FILTER BOTTOM SHEET -->
+<div id="filterSheet" class="filter-sheet">
+  <div class="filter-header">
+    <span>Filter Layanan</span>
+    <i class="bx bx-x close-filter" onclick="closeFilter()"></i>
+  </div>
+
+  <div class="filter-content">
+    <label><input type="checkbox"> Digital Task</label>
+    <label><input type="checkbox"> Physical Task</label>
+    <label><input type="checkbox"> Pinjam Barang</label>
+    <label><input type="checkbox"> Subscription</label>
+  </div>
+
+  <button class="apply-filter" onclick="applyFilter()">Terapkan</button>
+</div>
+
+<div id="filterOverlay" class="filter-overlay" onclick="closeFilter()"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="home.html" class="nav-item active"><i class="bx bx-home-alt"></i><span>Home</span></a>
+  <a href="chat.html" class="nav-item"><i class="bx bx-chat"></i><span>Chat</span></a>
+  <a href="activities.html" class="nav-item"><i class="bx bx-task"></i><span>Activities</span></a>
+  <a href="profile.html" class="nav-item"><i class="bx bx-user"></i><span>Profile</span></a>
+</nav>
+
+<script>
+
+  // ======================
+// LOAD RECENT TASK
+// ======================
+function loadRecentTask() {
+  let list = JSON.parse(localStorage.getItem("recentTasks") || "[]");
+
+  if (list.length === 0) return; // tidak ada task
+
+  const latest = list[0]; // ambil task terbaru
+
+  // fallback jika data rusak
+  if (!latest.createdAt || isNaN(latest.createdAt)) {
+    latest.createdAt = Date.now();
+  }
+  if (!latest.progress) latest.progress = 0;
+
+  // Update UI
+  const container = document.querySelector(".task-card");
+
+  container.innerHTML = `
+    <div class="task-header">
+      <div class="avatar-circle" style="background:none; overflow:hidden;">
+        <img src="aiden.jpg" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div>
+        <p class="task-name">${latest.partner}</p>
+        <p class="task-id">Task ID: ${latest.id}</p>
+      </div>
+    </div>
+
+    <h3 class="task-title">${latest.jobdesk}</h3>
+
+    <p class="task-meta">
+      Start: ${new Date(latest.createdAt).toLocaleString("id-ID")}
+    </p>
+
+    <div class="progress-row">
+      <span>Progress</span>
+      <span id="progressText">${latest.progress}%</span>
+    </div>
+
+    <div class="progress-bar">
+      <div id="progressFill" class="progress-fill" 
+           style="width:${latest.progress}%"></div>
+    </div>
+
+    <button class="outline-btn full" onclick="openTaskDetail()">Lihat Selengkapnya</button>
+  `;
+
+  startAutoProgress(latest);
+}
+
+
+// ======================
+// AUTO PROGRESS TASK
+// ======================
+function autoProgress(task) {
+  let interval = setInterval(() => {
+
+    task.progress += 1;
+    if (task.progress > 100) task.progress = 100;
+
+    // UPDATE UI
+    document.getElementById("progressText").innerText = task.progress + "%";
+    document.getElementById("progressFill").style.width = task.progress + "%";
+
+    // UPDATE STORAGE
+    let list = JSON.parse(localStorage.getItem("recentTasks") || "[]");
+    list[0].progress = task.progress;
+    localStorage.setItem("recentTasks", JSON.stringify(list));
+
+    // STOP
+    if (task.progress >= 100) clearInterval(interval);
+
+  }, 150); // semakin besar angkanya semakin lambat
+}
+
+function startAutoProgress(task) {
+  let interval = setInterval(() => {
+
+    task.progress += 1;
+    if (task.progress > 100) task.progress = 100;
+
+    document.getElementById("progressText").innerText = task.progress + "%";
+    document.getElementById("progressFill").style.width = task.progress + "%";
+
+    // update localStorage
+    let list = JSON.parse(localStorage.getItem("recentTasks") || "[]");
+    list[0].progress = task.progress; 
+    localStorage.setItem("recentTasks", JSON.stringify(list));
+
+    if (task.progress >= 100) {
+      clearInterval(interval);
+    }
+
+  }, 180); // --- kecepatan animasi progress bar
+}
+
+
+loadRecentTask();
+
+
+  function smoothGo(url) {
+    const s = document.getElementById("frame");
+    s.classList.add("fade-out");
+    setTimeout(() => window.location.href = url, 450);
+  }
+
+  function openNotifications() {
+    // nanti bisa diganti smoothGo("notification.html");
+    window.location.href = "notification.html";
+  }
+
+  let notifList = JSON.parse(localStorage.getItem("notifTasquirre") || "[]");
+
+const hasUnread = notifList.some(n => n.read === false);
+
+if (hasUnread) {
+  document.getElementById("notifDot").style.display = "block";
+} else {
+  document.getElementById("notifDot").style.display = "none";
+}
+
+
+  function openFilter() {
+    document.getElementById("filterSheet").classList.add("active");
+    document.getElementById("filterOverlay").classList.add("active");
+  }
+
+  function closeFilter() {
+    document.getElementById("filterSheet").classList.remove("active");
+    document.getElementById("filterOverlay").classList.remove("active");
+  }
+
+  // Saat halaman home dibuka, ambil saldo dari localStorage
+let saldo = localStorage.getItem("saldoTasquirre");
+if (!saldo) {
+  saldo = 0; // default saldo awal
+  localStorage.setItem("saldoTasquirre", saldo);
+}
+
+document.getElementById("walletAmount").innerText =
+  Number(saldo).toLocaleString("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+
+/* === POINT SYSTEM FIX === */
+
+let poin = localStorage.getItem("poinTasquirre");
+
+/* Jika pertama kali aplikasi dibuka dan belum pernah ada poin */
+if (poin === null) {
+  poin = 0;
+  localStorage.setItem("poinTasquirre", poin);
+}
+
+/* Tampilkan ke UI */
+document.querySelector(".wallet-points").innerText =
+  `${Number(poin).toLocaleString("id-ID")} poin`;
+
+/* Helper functions untuk menambah/mengurangi poin */
+function addPoin(amount) {
+  let p = Number(localStorage.getItem("poinTasquirre") || 0);
+  p += Number(amount);
+  localStorage.setItem("poinTasquirre", p);
+  updatePoinUI();
+}
+
+function reducePoin(amount) {
+  let p = Number(localStorage.getItem("poinTasquirre") || 0);
+  p -= Number(amount);
+  if (p < 0) p = 0;
+  localStorage.setItem("poinTasquirre", p);
+  updatePoinUI();
+}
+
+/* Update tulisan poin di layar */
+function updatePoinUI() {
+  document.querySelector(".wallet-points").innerText =
+    `${Number(localStorage.getItem("poinTasquirre")).toLocaleString("id-ID")} poin`;
+}
+
+
+
+function comingSoon() {
+  showToast("This feature is coming soon");
+}
+
+function goPhysicalDetail() {
+  const frame = document.getElementById("frame");
+  frame.classList.add("fade-out");
+  setTimeout(() => window.location.href="bersihrumah.html", 450);
+}
+
+
+
+function applyFilter() {
+  closeFilter();
+  showToast("Filter diterapkan!");
+}
+
+ const layananList = [
+    { name: "Copywriting", link: "copywriting.html" },
+    { name: "Bersih-Bersih Rumah", link: "bersihrumah.html" }
+  ];
+
+  const searchInput = document.querySelector(".search-input input");
+  const searchResults = document.getElementById("searchResults");
+
+  searchInput.addEventListener("input", function () {
+    const query = this.value.toLowerCase().trim();
+
+    if (query.length === 0) {
+      searchResults.style.display = "none";
+      return;
+    }
+
+    const filtered = layananList.filter(item =>
+      item.name.toLowerCase().includes(query)
+    );
+
+    if (filtered.length === 0) {
+      searchResults.innerHTML = `
+        <div class="search-item">
+          <i class='bx bx-error'></i> Tidak ada hasil
+        </div>`;
+      searchResults.style.display = "block";
+      return;
+    }
+
+    searchResults.innerHTML = filtered
+      .map(item => `
+        <div class="search-item" onclick="goToSearchResult('${item.link}')">
+          <i class='bx bx-search'></i> ${item.name}
+        </div>
+      `)
+      .join("");
+
+    searchResults.style.display = "block";
+  });
+
+  /* === ENTER TO SELECT FIRST RESULT === */
+searchInput.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault(); // biar nggak reload halaman
+
+    const items = document.querySelectorAll(".search-item");
+
+    if (items.length > 0) {
+      // Ambil item pertama dari hasil pencarian
+      const first = items[0];
+
+      // Ambil text-nya
+      const selectedName = first.textContent.trim();
+
+      // Cari datanya dari layananList
+      const found = layananList.find(item =>
+        item.name.toLowerCase() === selectedName.toLowerCase()
+      );
+
+      if (found) {
+        goToSearchResult(found.link);
+      }
+    }
+  }
+});
+
+
+  /* KLIK RESULT → REDIRECT */
+  function goToSearchResult(link) {
+    // animasi fade-out
+    const frame = document.getElementById("frame");
+    frame.classList.add("fade-out");
+    setTimeout(() => {
+      window.location.href = link;
+    }, 450);
+
+    searchResults.style.display = "none";
+  }
+
+  /* CLICK OUTSIDE → CLOSE */
+  document.addEventListener("click", function (e) {
+    if (!searchResults.contains(e.target) && !searchInput.contains(e.target)) {
+      searchResults.style.display = "none";
+    }
+  });
+
+  function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1800);
+}
+
+/* SWITCH TO PARTNER → REDIRECT */
+document.querySelector(".pill-btn.secondary").addEventListener("click", () => {
+  const frame = document.getElementById("frame");
+  frame.classList.add("fade-out");
+  setTimeout(() => {
+    window.location.href = "homepartner.html";
+  }, 450);
+});
+
+
+/* TOP UP BUTTON → REDIRECT */
+document.querySelector(".pill-btn.primary").addEventListener("click", () => {
+  const frame = document.getElementById("frame");
+  frame.classList.add("fade-out");
+setTimeout(()=>window.location.href="topup.html?from=user",450);
+
+});
+
+function goToSaldoHistory() {
+  const frame = document.getElementById("frame");
+  frame.classList.add("fade-out");
+  setTimeout(() => {
+    window.location.href = "saldohistory.html";
+  }, 450);
+}
+
+function goDigitalTask() {
+  const frame = document.getElementById("frame");
+  frame.classList.add("fade-out");
+  setTimeout(() => {
+    window.location.href = "digitaltask.html";
+  }, 450);
+}
+
+function goPhysicalTask() {
+  const f = document.getElementById("frame");
+  f.classList.add("fade-out");
+  setTimeout(() => window.location.href = "physicaltask.html", 450);
+}
+
+function goActivities() {
+  const f = document.getElementById("frame");
+  f.classList.add("fade-out");
+  setTimeout(() => {
+    window.location.href = "activities.html?tab=ongoing";
+  }, 450);
+}
+
+function openTaskDetail() {
+  const frame = document.getElementById("frame");
+  frame.classList.add("fade-out");
+  setTimeout(() => {
+    window.location.href = "taskcompleted_copywriting.html";
+  }, 450);
+}
+
+
+
+</script>
+
+
+</body>
+</html>
