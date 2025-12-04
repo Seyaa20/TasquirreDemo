@@ -27,7 +27,8 @@
       justify-content: center;
       align-items: stretch;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     .bubble .check,
@@ -114,6 +115,12 @@
       background-position: center;
       background-attachment: fixed;
     }
+
+.chat-thread {
+  bottom: 80px !important;
+}
+
+
 
     .chat-thread::before {
       content: "";
@@ -216,18 +223,16 @@
     }
 
     /* INPUT BAR */
-    .input-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0.45rem 0.8rem;
-      background: var(--bg);
-      border-top: 1px solid var(--border-soft);
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-    }
+.input-bar {
+  z-index: 9999 !important;
+  position: fixed !important;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 428px;
+}
+
 
     .icon-btn {
       width: 38px;
@@ -338,6 +343,13 @@
       background: #e0c7a5;
       border-radius: 999px;
     }
+
+    .emoji-picker:not(.show),
+.toast-order:not(.show),
+.popup-bg:not(.show) {
+  pointer-events: none !important;
+}
+
 
     /* AUDIO BUBBLE */
     .audio-bubble {
